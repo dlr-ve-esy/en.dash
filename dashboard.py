@@ -16,17 +16,17 @@ def load_data() -> pd.DataFrame:
 df = load_data()
 
 
-st.write(df)
-st.line_chart(df, x=None, y="unemployment")
 option = st.selectbox(
     label="Parameter",
     options=df.columns
 )
+options = [option, "gdp"]
 
 p = figure(
-    title='unemployment over model iterations',
+    title=f'{option} over model iterations',
     x_axis_label='model iteration',
-    y_axis_label='unemployment rate'
+    y_axis_label=option
 )
-p.line(df.index, df[option], legend_label='Trend', line_width=2)
+[p.line(df.index, df[o], legend_label=o, line_width=2) for o in options]
+# p.line(df.index, df[option], legend_label='Trend', line_width=2)
 st.bokeh_chart(p, use_container_width=True)
