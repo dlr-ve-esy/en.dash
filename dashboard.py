@@ -1,7 +1,10 @@
+# SPDX-FileCopyrightText: 2023 German Aerospace Center
+# SPDX-License-Identifier: CC-BY-4.0
+
+
 import streamlit as st
 import pandas as pd
 from bokeh.plotting import figure
-
 
 
 def load_data() -> pd.DataFrame:
