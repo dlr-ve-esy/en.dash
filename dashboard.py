@@ -5,6 +5,8 @@
 import streamlit as st
 import pandas as pd
 from bokeh.plotting import figure
+from esyplots.layouts.simple import create_layout
+from esyplots.plots.line import Line
 
 
 def load_data() -> pd.DataFrame:
@@ -15,18 +17,11 @@ def load_data() -> pd.DataFrame:
 
 df = load_data()
 
-
-option = st.selectbox(
-    label="Parameter",
-    options=df.columns
-)
-options = [option, "gdp"]
-
-p = figure(
-    title=f'{option} over model iterations',
-    x_axis_label='model iteration',
-    y_axis_label=option
-)
-[p.line(df.index, df[o], legend_label=o, line_width=2) for o in options]
-# p.line(df.index, df[option], legend_label='Trend', line_width=2)
-st.bokeh_chart(p, use_container_width=True)
+my_line = Line(df, title="1")
+my_other_line = Line(df, title="2")
+elements = [
+    {"radio_label": "select1", "radio_options": df.columns, "plotting_function": my_line},
+    {"radio_label": "selectanother", "radio_options": [_ for _ in df.columns], "plotting_function": my_other_line}
+]
+create_layout(elements)
+# create_layout("Please select", df.columns, plotting_function=my_line, data=df)
