@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit_echarts import st_echarts
-from tools import update_options_with_defaults
+from dashboard.tools import update_options_with_defaults
 
 
 def create(data):

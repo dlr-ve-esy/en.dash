@@ -1,4 +1,5 @@
 import streamlit as st
+import collections.abc
 
 
 def update_options_with_defaults(options):
@@ -7,6 +8,9 @@ def update_options_with_defaults(options):
         if st.session_state["style"] != "dark"
         else "#0E1117",
     }
-
-    options.update(defaults)
+    for k, v in defaults.items():
+        if isinstance(v, collections.abc.Mapping):
+            options[k] = update_options_with_defaults(options.get(k, {}), v)
+        else:
+            options[k] = v
     return options
