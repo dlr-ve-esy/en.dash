@@ -1,8 +1,8 @@
 import streamlit as st
 import numpy as np
 import pathlib as pt
-from tabs import tab0, tab1, tab2, tab3
-from layout import sidebar
+from dashboard.tabs import tab0, tab1, tab2, tab3
+from dashboard.layout import sidebar
 
 
 def load_data(path: pt.Path) -> dict:

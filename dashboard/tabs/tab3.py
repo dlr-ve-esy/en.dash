@@ -1,12 +1,10 @@
 import streamlit as st
 from streamlit_echarts import st_echarts
+from tools import update_options_with_defaults
 
 
 def create(data):
-    option = {
-        "backgroundColor": "#FFFFFF"
-        if st.session_state["style"] != "dark"
-        else "#0E1117",
+    options = {
         "title": {
             "text": "the name of the game is quarks",
             "left": "center",
@@ -67,7 +65,8 @@ def create(data):
             },
         ],
     }
+    options = update_options_with_defaults(options)
     st_echarts(
-        options=option,
+        options=options,
         height="400px",
     )
