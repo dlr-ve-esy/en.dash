@@ -18,10 +18,9 @@ def update_options_with_defaults(options):
         else "#0E1117",
         "toolbox": {
             "feature": {
-                # "mark": {"show": True},
-                # "dataView": {"show": True, "readOnly": False},
-                # "restore": {"show": True},
-                "saveAsImage": {"show": True},
+                "dataView": {"show": True, "readOnly": False},
+                "restore": {"show": True},
+                "saveAsImage": {"show": True, "type": "png", "title": "save as png"},
             },
         },
     }
