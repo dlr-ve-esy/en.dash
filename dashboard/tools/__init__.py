@@ -16,12 +16,13 @@ def update_options_with_defaults(options):
         "backgroundColor": "#FFFFFF"
         if st.session_state["style"] != "dark"
         else "#0E1117",
-        "feature": {
-            "mark": {"show": "true"},
-            "dataView": {"show": "true", "readOnly": "false"},
-            "magicType": {"show": "true", "type": ["line", "bar"]},
-            "restore": {"show": "true"},
-            "saveAsImage": {"show": "true"},
+        "toolbox": {
+            "feature": {
+                # "mark": {"show": True},
+                # "dataView": {"show": True, "readOnly": False},
+                # "restore": {"show": True},
+                "saveAsImage": {"show": True},
+            },
         },
     }
     return __update(options, defaults)
