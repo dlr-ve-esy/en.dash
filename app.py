@@ -32,7 +32,7 @@ if __name__ == "__main__":
     if "style" not in st.session_state:
         st.session_state["style"] = "dark"
 
-    tab_names = ["tab0", "tab1", "tab2", "tab3"]
+    tab_names = ["tab0", "tab1", "tab2", "tab3", "tab4"]
 
     st.set_page_config(page_title="sfc dashboard", layout="wide")
 
@@ -60,6 +60,8 @@ if __name__ == "__main__":
             tab2.create(data)
         if st.session_state["active_tab"] == tab_names[3]:
             tab3.create(data["dataset1"])
+        if st.session_state["active_tab"] == tab_names[4]:
+            tab4.create(data["Dispatch"])
 
         # tabs = st.tabs(["tab0", "tab1", "tab2", "tab3"])
 
