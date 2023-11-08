@@ -7,3 +7,6 @@
 
 # there is a plot config which contains user overrides influencing the look and feel of single plots
 - needed for example for different plot legends in different languages
+
+# plot metadata is stored as a json string and is stored in the hdf5
+- metadata needs to be serialized for secure storage and json is the most common format
