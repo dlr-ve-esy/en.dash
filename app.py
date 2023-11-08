@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 import pathlib as pt
-from dashboard.tabs import tab0, tab1, tab2, tab3, tab4
+from dashboard.tabs import tab0, tab1, tab2, tab3, tab4, tab5
 from dashboard.layout import sidebar
 import pandas as pd
 import json
@@ -31,6 +31,15 @@ def load_data(path: pt.Path) -> dict:
         hdfpackage_path = "TimeSeries/MultiKey/Dispatch"
         datasets["Dispatch"] = load.get(hdfpackage_path)
         metadata["Dispatch"] = get_meta(load, hdfpackage_path)
+
+        hdfpackage_path = 'Bar/Capacity'
+        df = load.get(hdfpackage_path).reset_index()
+        df2 = df.copy()
+        df2['Year'] = 2020
+        df2['InstalledPower'] = df['InstalledPower'] + 100
+        df_new = pd.concat([df, df2])
+        datasets["inst_power"] = df_new
+        metadata["inst_power"] = get_meta(load, hdfpackage_path)
     else:
         datasets["SingleKey"] = pd.DataFrame()
         metadata["SingleKey"] = {}
@@ -84,7 +93,7 @@ if __name__ == "__main__":
             tab0.create(data["SingleKey"], metadata["SingleKey"])
         if st.session_state["active_tab"] == dash_cfg.tabs[1].id:
             st.header(dash_cfg.tabs[1].label)
-            tab1.create(data)
+            tab1.create(data["inst_power"], metadata["inst_power"])
         if st.session_state["active_tab"] == dash_cfg.tabs[2].id:
             st.header(dash_cfg.tabs[2].label)
             tab2.create(data)
@@ -94,6 +103,9 @@ if __name__ == "__main__":
         if st.session_state["active_tab"] == dash_cfg.tabs[4].id:
             st.header(dash_cfg.tabs[4].label)
             tab4.create(data["Dispatch"], metadata["Dispatch"])
+        if st.session_state["active_tab"] == dash_cfg.tabs[5].id:
+            st.header(dash_cfg.tabs[5].label)
+            tab5.create(data["SingleKey"], metadata["SingleKey"])
 
         if dash_cfg.enable_references:
             if st.session_state["active_tab"] == dash_cfg.tabs[-1].id:

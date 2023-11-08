@@ -22,6 +22,10 @@
         {
             "id": "tab4",
             "label": "Tab Five"
+        },
+        {
+            "id": "tab5",
+            "label": "Tab Six"
         }
     ],
     "references": [
