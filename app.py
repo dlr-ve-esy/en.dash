@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 import pathlib as pt
-from dashboard.tabs import tab0, tab1, tab2, tab3, tab4
+from dashboard.tabs import tab0, tab1, tab2, tab3, tab4, tab5
 from dashboard.layout import sidebar
 import pandas as pd
 import json
@@ -83,6 +83,9 @@ if __name__ == "__main__":
         if st.session_state["active_tab"] == dash_cfg.tabs[4].id:
             st.header(dash_cfg.tabs[4].label)
             tab4.create(data["Dispatch"], metadata["Dispatch"])
+        if st.session_state["active_tab"] == dash_cfg.tabs[5].id:
+            st.header(dash_cfg.tabs[5].label)
+            tab5.create(data["SingleKey"], metadata["SingleKey"])
 
         if dash_cfg.enable_references:
             if st.session_state["active_tab"] == dash_cfg.tabs[-1].id:
