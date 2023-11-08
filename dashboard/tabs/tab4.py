@@ -10,7 +10,7 @@ import pandas as pd
 idx = pd.IndexSlice
 
 
-def create(data):
+def create(data, metadata):
     st.header("tab 4")
 
     radio_option = st.radio(
@@ -22,14 +22,13 @@ def create(data):
     df = pd.pivot_table(
         data.loc[idx[radio_option, :, :]],
         columns="Technology",
-        index="TimeStep",
+        index="TimeStamp",
         values="AwardedPower"
     ).dropna(how="any", axis=0)
 
     line_options = lines.stacked_area(
-        df.index.tolist(),
-        *[df[col].tolist() for col in df.columns],
-        # title=radio_option
+        df,
+        metadata
     )
     line_options = update_options_with_defaults(line_options)
     st_echarts(line_options)

@@ -33,7 +33,7 @@ def line(data, metadata, title=""):
     return options
 
 
-def stacked_area(x, *y):
+def stacked_area(data, metadata):
     datazoom = {
     "dataZoom": [
         {
@@ -51,7 +51,7 @@ def stacked_area(x, *y):
             "trigger": "axis",
             "axisPointer": {"animation": False},
         },
-        "legend": {"data": ["邮件营销", "联盟广告", "视频广告", "直接访问", "搜索引擎"]},
+        "legend": {"data": [col for col in data.columns]},
         "toolbox": {"feature": {
             "dataZoom": {
                 "yAxisIndex": 'none'
@@ -72,19 +72,28 @@ def stacked_area(x, *y):
                 "type": "category",
                 "boundaryGap": False,
                 "axisLine": {"onZero": True},
-                "data": x,
+                "data": data.index.tolist(),
             }
         ],
         "yAxis": [{"type": "value"}],
         "series": [
             {
-                "name": "邮件营销",
+                "data": data[col].tolist(),
                 "type": "line",
-                "stack": "1",
-                "areaStyle": {},
-                "emphasis": {"focus": "series"},
-                "data": _y,
-            } for _y in y
+                "name": col,
+                "stack": "stack0",
+                "areastyle": {},
+                "emphasis": {"focus": "series"}
+            }
+            for col in data.columns
+            # {
+            #     "name": "",
+            #     "type": "line",
+            #     "stack": "1",
+            #     "areaStyle": {},
+            #     "emphasis": {"focus": "series"},
+            #     "data": _y,
+            # } for _y in y
         ],
     }
     options["dataZoom"] = datazoom["dataZoom"]
