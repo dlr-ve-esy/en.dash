@@ -30,6 +30,15 @@ def load_data(path: pt.Path) -> dict:
         hdfpackage_path = "TimeSeries/MultiKey/Dispatch"
         datasets["Dispatch"] = load.get(hdfpackage_path)
         metadata["Dispatch"] = get_meta(load, hdfpackage_path)
+
+        hdfpackage_path = 'Bar/Capacity'
+        df = load.get(hdfpackage_path).reset_index()
+        df2 = df.copy()
+        df2['Year'] = 2020
+        df2['InstalledPower'] = df['InstalledPower'] + 100
+        df_new = pd.concat([df, df2])
+        datasets["inst_power"] = df_new
+        metadata["inst_power"] = get_meta(load, hdfpackage_path)
     else:
         datasets["SingleKey"] = pd.DataFrame()
         metadata["SingleKey"] = {}
@@ -73,7 +82,7 @@ if __name__ == "__main__":
             tab0.create(data["SingleKey"], metadata["SingleKey"])
         if st.session_state["active_tab"] == dash_cfg.tabs[1].id:
             st.header(dash_cfg.tabs[1].label)
-            tab1.create(data)
+            tab1.create(data["inst_power"], metadata["inst_power"])
         if st.session_state["active_tab"] == dash_cfg.tabs[2].id:
             st.header(dash_cfg.tabs[2].label)
             tab2.create(data)
