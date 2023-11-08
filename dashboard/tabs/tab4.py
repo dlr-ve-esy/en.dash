@@ -13,17 +13,18 @@ idx = pd.IndexSlice
 def create(data, metadata):
     st.header("tab 4")
 
+    config = {"selector" : "Region", "stacker": "Technology", "xaxis": "TimeStamp", "value": "AwardedPower"}
     radio_option = st.radio(
         label="Select country",
-        options=data.index.get_level_values("Region").unique().tolist(),
+        options=data.index.get_level_values(config["selector"]).unique().tolist(),
         key="tab4radio"
     )
 
     df = pd.pivot_table(
-        data.loc[idx[radio_option, :, :]],
-        columns="Technology",
-        index="TimeStamp",
-        values="AwardedPower"
+        data.xs(radio_option, level=config["selector"]),
+        columns=config["stacker"],
+        index=config["xaxis"],
+        values=config["value"]
     ).dropna(how="any", axis=0)
 
     line_options = lines.stacked_area(
