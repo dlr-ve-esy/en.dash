@@ -1,12 +1,16 @@
 import streamlit as st
 from streamlit_echarts import st_echarts, JsCode
-from dashboard.tools import update_options_with_defaults
+from dashboard.tools import (
+    update_options_with_defaults,
+    delete_barred_user_overrides,
+    update_options_with_user_overrides,
+)
 import numpy as np
 from streamlit_extras.chart_container import chart_container
 import pandas as pd
 
 
-def create(data):
+def create(data, metadata, plots_cfg):
     st.subheader("test plots")
     navbar, plotarea = st.columns([0.2, 0.8])
 
@@ -46,7 +50,16 @@ def create(data):
                     "encode": {"tooltip": [0, 1]},
                 },
             }
+            user = delete_barred_user_overrides(
+                plots_cfg["experimental_plot"],
+                {
+                    "xAxis": None,
+                    "yAxis": None,
+                },
+            )
+            options = update_options_with_user_overrides(options, user)
             options = update_options_with_defaults(options)
+
             st_echarts(
                 options=options,
                 theme="dark",
