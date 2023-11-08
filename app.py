@@ -32,11 +32,11 @@ def load_data(path: pt.Path) -> dict:
         datasets["Dispatch"] = load.get(hdfpackage_path)
         metadata["Dispatch"] = get_meta(load, hdfpackage_path)
 
-        hdfpackage_path = 'Bar/Capacity'
+        hdfpackage_path = "Bar/Capacity"
         df = load.get(hdfpackage_path).reset_index()
         df2 = df.copy()
-        df2['Year'] = 2020
-        df2['InstalledPower'] = df['InstalledPower'] + 100
+        df2["Year"] = 2020
+        df2["InstalledPower"] = df["InstalledPower"] + 100
         df_new = pd.concat([df, df2])
         datasets["inst_power"] = df_new
         metadata["inst_power"] = get_meta(load, hdfpackage_path)
@@ -69,18 +69,17 @@ if __name__ == "__main__":
 
     data, metadata = load_data(pt.Path("./data/output.hdf5"))
 
+    if "active_tab" not in st.session_state:
+        st.session_state["active_tab"] = dash_cfg.tabs[0].id
+
     with st.sidebar:
         sidebar.create(dash_cfg)
-        st.session_state["active_tab"] = dash_cfg.tabs[0].id
         for idx, (_, itab) in enumerate(dash_cfg.tabs):
             res = st.button(f":bar_chart: {itab}", use_container_width=True)
             if res:
                 st.session_state["active_tab"] = dash_cfg.tabs[idx].id
 
     root = st.container()
-
-    if "active_tab" not in st.session_state:
-        st.session_state["active_tab"] = dash_cfg.tabs[0].id
 
     with root:
         # with st.sidebar:
