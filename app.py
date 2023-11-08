@@ -7,6 +7,7 @@ import pandas as pd
 import json
 from dashboard.tools.configuration import DashboardConfiguration, TabData
 from streamlit_extras.markdownlit import mdlit
+from collections import defaultdict
 
 
 def get_meta(store: object, hdfpackage_path: str) -> dict:
@@ -44,6 +45,11 @@ def load_data(path: pt.Path) -> dict:
 if __name__ == "__main__":
     dash_cfg = DashboardConfiguration.load(pt.Path("./dashboard_config.json"))
 
+    plots_cfg = defaultdict(dict)
+    for ifile in pt.Path("./configurations").glob("*.json"):
+        cfg_data = json.load(ifile.open("r"))
+        plots_cfg[ifile.stem] = cfg_data
+
     if dash_cfg.tabs[-1].id != "references":
         dash_cfg.tabs.append(TabData("references", "References"))
 
@@ -79,7 +85,7 @@ if __name__ == "__main__":
             tab2.create(data)
         if st.session_state["active_tab"] == dash_cfg.tabs[3].id:
             st.header(dash_cfg.tabs[3].label)
-            tab3.create(data["dataset1"])
+            tab3.create(data["dataset1"], metadata, plots_cfg)
         if st.session_state["active_tab"] == dash_cfg.tabs[4].id:
             st.header(dash_cfg.tabs[4].label)
             tab4.create(data["Dispatch"], metadata["Dispatch"])
