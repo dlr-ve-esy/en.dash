@@ -24,6 +24,8 @@ def load_data(path: pt.Path) -> dict:
     metadata = {}
     datasets["SingleKey"] = load.get("TimeSeries/SingleKey")
     metadata["SingleKey"] = json.loads(load.get_storer("TimeSeries/SingleKey").attrs["plot_metadata"])
+    datasets["dataset1"] = np.random.randint(1, 999, (2, 100))
+    metadata["dataset1"] = {}
 
     return datasets, metadata
 
