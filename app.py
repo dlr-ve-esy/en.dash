@@ -6,13 +6,6 @@ from dashboard.layout import sidebar
 import pandas as pd
 import json
 
-from dashboard.tools import update_options_with_defaults
-from streamlit_echarts import st_echarts
-from streamlit_extras.chart_container import chart_container
-import pandas as pd
-
-from streamlit_extras.switch_page_button import switch_page
-
 
 def get_meta(store: object, hdfpackage_path: str) -> dict:
     return json.loads(store.get_storer(hdfpackage_path).attrs["plot_metadata"])
@@ -26,9 +19,16 @@ def load_data(path: pt.Path) -> dict:
 
     datasets = {}
     metadata = {}
+<<<<<<< HEAD
     hdfpackage_path ="TimeSeries/SingleKey"
     datasets["SingleKey"] = load.get(hdfpackage_path)
     metadata["SingleKey"] = get_meta(load, hdfpackage_path)
+=======
+    datasets["SingleKey"] = load.get("TimeSeries/SingleKey")
+    metadata["SingleKey"] = json.loads(
+        load.get_storer("TimeSeries/SingleKey").attrs["plot_metadata"]
+    )
+>>>>>>> a039f7b6a784f9147e93f02dca3477c319fb5d8b
     datasets["dataset1"] = np.random.randint(1, 999, (2, 100))
     metadata["dataset1"] = {}
     hdfpackage_path = "TimeSeries/MultiKey/Dispatch"
@@ -72,63 +72,3 @@ if __name__ == "__main__":
             tab3.create(data["dataset1"])
         if st.session_state["active_tab"] == tab_names[4]:
             tab4.create(data["Dispatch"], metadata["Dispatch"])
-
-        # tabs = st.tabs(["tab0", "tab1", "tab2", "tab3"])
-
-        # with tabs[0]:
-        #     tab0.create(data)
-        # with tabs[1]:
-        #     tab1.create(data)
-        # with tabs[2]:
-        #     tab2.create(data)
-        # with tabs[3]:
-        #     tab3.create(data["dataset1"])
-
-    # if "rerun" not in st.session_state:
-    #     st.session_state["rerun"] = True
-
-    # if st.session_state["rerun"]:
-    #     st.session_state["rerun"] = False
-    #     st.rerun()
-
-    # if want_to_contribute:
-    #     with chart_container(pd.DataFrame(data["dataset1"])):
-    #         options = {
-    #             "title": {
-    #                 "text": "scattering the scatters",
-    #                 "left": "center",
-    #                 "textStyle": {
-    #                     "color": "#999",
-    #                     "fontWeight": "normal",
-    #                     "fontSize": 14,
-    #                 },
-    #             },
-    #             "tooltip": {"position": "top"},
-    #             "visualMap": {
-    #                 "min": 0,
-    #                 "max": 1000,
-    #                 "text": ["high", "low"],
-    #                 "realtime": True,
-    #                 "calculable": True,
-    #                 "left": "2px",
-    #                 "top": "20px",
-    #             },
-    #             "grid": {"left": "200px"},
-    #             "xAxis": {},
-    #             "yAxis": {},
-    #             "series": {
-    #                 # "symbolSize": JsCode("function (val) { return val[1] * 0.01;}").js_code,
-    #                 "symbolSize": 10,
-    #                 "data": data["dataset1"].T.tolist(),
-    #                 "type": "scatter",
-    #                 "encode": {"tooltip": [0, 1]},
-    #             },
-    #         }
-    #         options = update_options_with_defaults(options)
-    #         st_echarts(
-    #             options=options,
-    #             theme="dark",
-    #             height="500px",
-    #             width="700px",
-    #             key="test",
-    #         )
