@@ -1,26 +1,47 @@
-import random
-
-
-def line(data):
+def line(data, metadata, title=""):
     options = {
+        "title": {"text": title},
+        "tooltip": {
+            "trigger": "axis",
+            "axisPointer": {"animation": False},
+        },
+        "legend": {"data": [metadata[col]["label"] for col in metadata]},
+        "axisPointer": {
+            "link": [
+                {"xAxisIndex": "all"}
+            ]
+        },
+        "dataZoom": [
+            {
+                "type": 'slider',
+                "start": 0,
+                "end": 1,
+                "xAxisIndex": 0,
+                "zoomLock": True
+            }
+        ],
         "xAxis": {
             "type": "category",
-            "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            "data": data.index.tolist(),
         },
         "yAxis": {"type": "value"},
-        "series": [{"data": [820, 932, 901, 934, 1290, 1330, 1320], "type": "line"}],
+        "series": [
+            {"data": data[col].tolist(), "type": "line", "name": metadata[col]["label"]}
+            for col in data.columns
+        ],
     }
     return options
 
 
-def stacked_area(data):
+def stacked_area(x, *y):
     datazoom = {
     "dataZoom": [
         {
             "type": 'slider',
-            "start": 20,
-            "end": 80,
-            "xAxisIndex": 0
+            "start": 25,
+            "end": 75,
+            "xAxisIndex": 0,
+            "zoomLock": True
         }
     ]
     }
@@ -51,7 +72,7 @@ def stacked_area(data):
                 "type": "category",
                 "boundaryGap": False,
                 "axisLine": {"onZero": True},
-                "data": [_ for _ in range(100)],
+                "data": x,
             }
         ],
         "yAxis": [{"type": "value"}],
@@ -59,19 +80,11 @@ def stacked_area(data):
             {
                 "name": "邮件营销",
                 "type": "line",
-                "stack": "总量",
+                "stack": "1",
                 "areaStyle": {},
                 "emphasis": {"focus": "series"},
-                "data": [random.randint(0, 100) for _ in range(100)],
-            },
-            {
-                "name": "联盟广告",
-                "type": "line",
-                "stack": "总量",
-                "areaStyle": {},
-                "emphasis": {"focus": "series"},
-                "data": [random.randint(0, 100) for _ in range(100)],
-            },
+                "data": _y,
+            } for _y in y
         ],
     }
     options["dataZoom"] = datazoom["dataZoom"]

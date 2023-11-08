@@ -1,8 +1,10 @@
 import streamlit as st
 import numpy as np
 import pathlib as pt
-from dashboard.tabs import tab0, tab1, tab2, tab3
+from dashboard.tabs import tab0, tab1, tab2, tab3, tab4
 from dashboard.layout import sidebar
+import pandas as pd
+import json
 
 from dashboard.tools import update_options_with_defaults
 from streamlit_echarts import st_echarts
@@ -16,7 +18,14 @@ def load_data(path: pt.Path) -> dict:
     # with zipfile.ZipFile(path.as_posix()) as zf:
     #     data = pd.read_csv(io.BytesIO(zf.read("Mark_Ie_Daten.csv")))
 
-    return {"dataset1": np.random.randint(1, 999, (2, 100))}
+    load = pd.HDFStore(path=path, mode="r")
+
+    datasets = {}
+    metadata = {}
+    datasets["SingleKey"] = load.get("TimeSeries/SingleKey")
+    metadata["SingleKey"] = json.loads(load.get_storer("TimeSeries/SingleKey").attrs["plot_metadata"])
+
+    return datasets, metadata
 
 
 if __name__ == "__main__":
@@ -27,7 +36,7 @@ if __name__ == "__main__":
 
     st.set_page_config(page_title="sfc dashboard", layout="wide")
 
-    data = load_data(pt.Path("./Mark_Ie_Daten.zip"))
+    data, metadata = load_data(pt.Path("./data/output.hdf5"))
 
     with st.sidebar:
         sidebar.create()
@@ -44,7 +53,7 @@ if __name__ == "__main__":
             )
 
         if st.session_state["active_tab"] == tab_names[0]:
-            tab0.create(data)
+            tab0.create(data["SingleKey"], metadata["SingleKey"])
         if st.session_state["active_tab"] == tab_names[1]:
             tab1.create(data)
         if st.session_state["active_tab"] == tab_names[2]:
