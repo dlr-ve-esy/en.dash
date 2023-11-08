@@ -9,6 +9,10 @@ from dashboard.tools.configuration import DashboardConfiguration, TabData
 from streamlit_extras.markdownlit import mdlit
 
 
+def get_meta(store: object, hdfpackage_path: str) -> dict:
+    return json.loads(store.get_storer(hdfpackage_path).attrs["plot_metadata"])
+
+
 def load_data(path: pt.Path) -> dict:
     # with zipfile.ZipFile(path.as_posix()) as zf:
     #     data = pd.read_csv(io.BytesIO(zf.read("Mark_Ie_Daten.csv")))
@@ -18,16 +22,21 @@ def load_data(path: pt.Path) -> dict:
 
     if path.exists():
         load = pd.HDFStore(path=path, mode="r")
-        datasets["SingleKey"] = load.get("TimeSeries/SingleKey")
-        metadata["SingleKey"] = json.loads(
-            load.get_storer("TimeSeries/SingleKey").attrs["plot_metadata"]
-        )
+        hdfpackage_path = "TimeSeries/SingleKey"
+        datasets["SingleKey"] = load.get(hdfpackage_path)
+        metadata["SingleKey"] = get_meta(load, hdfpackage_path)
+        datasets["dataset1"] = np.random.randint(1, 999, (2, 100))
+        metadata["dataset1"] = {}
+        hdfpackage_path = "TimeSeries/MultiKey/Dispatch"
+        datasets["Dispatch"] = load.get(hdfpackage_path)
+        metadata["Dispatch"] = get_meta(load, hdfpackage_path)
     else:
         datasets["SingleKey"] = pd.DataFrame()
         metadata["SingleKey"] = {}
-
-    datasets["dataset1"] = np.random.randint(1, 999, (2, 100))
-    metadata["dataset1"] = {}
+        datasets["dataset1"] = np.random.randint(1, 999, (2, 100))
+        metadata["dataset1"] = {}
+        datasets["Dispatch"] = pd.DataFrame()
+        metadata["Dispatch"] = {}
 
     return datasets, metadata
 
@@ -73,7 +82,7 @@ if __name__ == "__main__":
             tab3.create(data["dataset1"])
         if st.session_state["active_tab"] == dash_cfg.tabs[4].id:
             st.header(dash_cfg.tabs[4].label)
-            tab4.create(data["Dispatch"])
+            tab4.create(data["Dispatch"], metadata["Dispatch"])
 
         if dash_cfg.enable_references:
             if st.session_state["active_tab"] == dash_cfg.tabs[-1].id:
