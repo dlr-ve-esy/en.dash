@@ -1,0 +1,29 @@
+{
+    "enable_darkmode_toggle": true,
+    "enable_references": true,
+    "tabs": [
+        {
+            "id": "tab0",
+            "label": "Tab One"
+        },
+        {
+            "id": "tab1",
+            "label": "Tab Two"
+        },
+        {
+            "id": "tab2",
+            "label": "Tab Three"
+        },
+        {
+            "id": "tab3",
+            "label": "Tab Four"
+        },
+        {
+            "id": "tab4",
+            "label": "Tab Five"
+        }
+    ],
+    "references": [
+        "doi:3412242132312"
+    ]
+}
