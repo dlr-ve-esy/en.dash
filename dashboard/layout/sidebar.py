@@ -19,13 +19,4 @@ def create(dash_cfg: DashboardConfiguration):
 
         st.image(logo)
 
-    st.write("Dashboard")
-    if dash_cfg.enable_darkmode_toggle:
-        darkmode_enabled = st.toggle("enable dark mode for plots")
-    else:
-        darkmode_enabled = False
-
-    if darkmode_enabled:
-        st.session_state["style"] = "dark"
-    else:
-        st.session_state["style"] = "light"
+    st.write(dash_cfg.dashboard_label)

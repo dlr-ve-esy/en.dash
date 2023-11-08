@@ -62,6 +62,11 @@ if __name__ == "__main__":
 
     with st.sidebar:
         sidebar.create(dash_cfg)
+        st.session_state["active_tab"] = dash_cfg.tabs[0].id
+        for idx, (_, itab) in enumerate(dash_cfg.tabs):
+            res = st.button(f":bar_chart: {itab}", use_container_width=True)
+            if res:
+                st.session_state["active_tab"] = dash_cfg.tabs[idx].id
 
     root = st.container()
 
@@ -69,10 +74,10 @@ if __name__ == "__main__":
         st.session_state["active_tab"] = dash_cfg.tabs[0].id
 
     with root:
-        with st.sidebar:
-            st.session_state["active_tab"] = st.radio(
-                label="select view", options=[i[0] for i in dash_cfg.tabs]
-            )
+        # with st.sidebar:
+        #     st.session_state["active_tab"] = st.radio(
+        #         label="select view", options=[i[0] for i in dash_cfg.tabs]
+        #     )
 
         if st.session_state["active_tab"] == dash_cfg.tabs[0].id:
             st.header(dash_cfg.tabs[0].label)
@@ -96,3 +101,15 @@ if __name__ == "__main__":
                 txt = "These are the references:\n\n"
                 refs = "".join(["- {}\n\n"] * len(dash_cfg.references))
                 mdlit(txt + refs.format(*dash_cfg.references))
+
+    with st.sidebar:
+        with st.expander("Options"):
+            if dash_cfg.enable_darkmode_toggle:
+                darkmode_enabled = st.toggle("enable dark mode for plots")
+            else:
+                darkmode_enabled = False
+
+        if darkmode_enabled:
+            st.session_state["style"] = "dark"
+        else:
+            st.session_state["style"] = "light"

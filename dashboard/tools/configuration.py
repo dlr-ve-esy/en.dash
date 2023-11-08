@@ -18,6 +18,7 @@ class DashboardConfiguration:
     enable_references: bool = field(default=True)
     tabs: list[TabData] = field(factory=lambda: [TabData("references", "References")])
     references: list[str] = field(factory=list)
+    dashboard_label: str = field(default="title of dashboard")
 
     @classmethod
     def load(cls, path: pt.Path):
