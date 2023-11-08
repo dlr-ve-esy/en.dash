@@ -19,16 +19,9 @@ def load_data(path: pt.Path) -> dict:
 
     datasets = {}
     metadata = {}
-<<<<<<< HEAD
     hdfpackage_path ="TimeSeries/SingleKey"
     datasets["SingleKey"] = load.get(hdfpackage_path)
     metadata["SingleKey"] = get_meta(load, hdfpackage_path)
-=======
-    datasets["SingleKey"] = load.get("TimeSeries/SingleKey")
-    metadata["SingleKey"] = json.loads(
-        load.get_storer("TimeSeries/SingleKey").attrs["plot_metadata"]
-    )
->>>>>>> a039f7b6a784f9147e93f02dca3477c319fb5d8b
     datasets["dataset1"] = np.random.randint(1, 999, (2, 100))
     metadata["dataset1"] = {}
     hdfpackage_path = "TimeSeries/MultiKey/Dispatch"
