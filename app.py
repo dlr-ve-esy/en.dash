@@ -14,6 +14,10 @@ import pandas as pd
 from streamlit_extras.switch_page_button import switch_page
 
 
+def get_meta(store: object, hdfpackage_path: str) -> dict:
+    return json.loads(store.get_storer(hdfpackage_path).attrs["plot_metadata"])
+
+
 def load_data(path: pt.Path) -> dict:
     # with zipfile.ZipFile(path.as_posix()) as zf:
     #     data = pd.read_csv(io.BytesIO(zf.read("Mark_Ie_Daten.csv")))
@@ -22,10 +26,14 @@ def load_data(path: pt.Path) -> dict:
 
     datasets = {}
     metadata = {}
-    datasets["SingleKey"] = load.get("TimeSeries/SingleKey")
-    metadata["SingleKey"] = json.loads(load.get_storer("TimeSeries/SingleKey").attrs["plot_metadata"])
+    hdfpackage_path ="TimeSeries/SingleKey"
+    datasets["SingleKey"] = load.get(hdfpackage_path)
+    metadata["SingleKey"] = get_meta(load, hdfpackage_path)
     datasets["dataset1"] = np.random.randint(1, 999, (2, 100))
     metadata["dataset1"] = {}
+    hdfpackage_path = "TimeSeries/MultiKey/Dispatch"
+    datasets["Dispatch"] = load.get(hdfpackage_path)
+    metadata["Dispatch"] = get_meta(load, hdfpackage_path)
 
     return datasets, metadata
 
@@ -63,7 +71,7 @@ if __name__ == "__main__":
         if st.session_state["active_tab"] == tab_names[3]:
             tab3.create(data["dataset1"])
         if st.session_state["active_tab"] == tab_names[4]:
-            tab4.create(data["Dispatch"])
+            tab4.create(data["Dispatch"], metadata["Dispatch"])
 
         # tabs = st.tabs(["tab0", "tab1", "tab2", "tab3"])
 
