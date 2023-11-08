@@ -17,10 +17,12 @@ def update_options_with_defaults(options):
         if st.session_state["style"] != "dark"
         else "#0E1117",
         "toolbox": {
+            "orient": "vertical",
+            "show": True,
             "feature": {
-                "dataView": {"show": True, "readOnly": False},
-                "restore": {"show": True},
-                "saveAsImage": {"show": True, "type": "png", "title": "save as png"},
+                "dataView": {"readOnly": False},
+                "restore": {},
+                "saveAsImage": {},
             },
         },
     }
