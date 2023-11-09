@@ -1,11 +1,15 @@
-def line(data, metadata, title=""):
-    options = {
-        "title": {"text": title},
+import pandas as pd
+
+from dashboard.tools import update_options_with_user_overrides
+
+
+def _default_line_options():
+    return {
+        "title": {"text": None},
         "tooltip": {
             "trigger": "axis",
             "axisPointer": {"animation": False},
         },
-        "legend": {"data": [metadata[col]["label"] for col in metadata]},
         "axisPointer": {
             "link": [
                 {"xAxisIndex": "all"}
@@ -20,6 +24,41 @@ def line(data, metadata, title=""):
                 "zoomLock": True
             }
         ],
+    }
+
+
+def line(data, metadata):
+    if not isinstance(data, pd.Series):
+        msg = "Line function takes a series only!"
+        raise TypeError(msg)
+
+    label = metadata[data.name]["label"]
+    unit = metadata[data.name]["unit"]
+    options = {
+        "legend": {"data": [metadata[data.name]["label"]]},
+        "xAxis": {
+            "type": "category",
+            "data": data.index.tolist(),
+        },
+        "yAxis": {
+            "type": "value",
+            "name": f"{label} in {unit}",
+            "nameLocation": "middle",
+            "nameGap": 75
+        },
+        "series": [{
+                "data": data.tolist(),
+                "type": "line",
+                "name": metadata[data.name]["label"]
+            }
+        ],
+    }
+    return update_options_with_user_overrides(_default_line_options(), options)
+
+
+def  multiline(data, metadata):
+    options = {
+        "legend": {"data": [metadata[col]["label"] for col in metadata]},
         "xAxis": {
             "type": "category",
             "data": data.index.tolist(),
@@ -30,7 +69,77 @@ def line(data, metadata, title=""):
             for col in data.columns
         ],
     }
-    return options
+    return update_options_with_user_overrides(_default_line_options(), options)
+
+
+def twolinetwoyaxes(data, metadata, axesmapping):
+    options = {
+        "legend": {"data": [metadata[col]["label"] for col in axesmapping]},
+        "dataZoom": [
+            {
+                "show": True,
+                "realtime": True,
+                "start": 1,
+                "end": 2,
+                "xAxisIndex": [0, 1]
+            },
+            {
+                "type": 'inside',
+                "realtime": True,
+                "start": 1,
+                "end": 2,
+                "xAxisIndex": [0, 1]
+            }
+        ],
+        "grid": [
+            {
+                "left": 60,
+                "right": 50,
+                "height": '35%'
+            },
+            {
+                "left": 60,
+                "right": 50,
+                "top": '55%',
+                "height": '35%'
+            }
+        ],
+        "xAxis": [
+            {
+                "type": 'category',
+                "boundaryGap": False,
+                "axisLine": { "onZero": True },
+                "data": data.index.tolist()
+            },
+            {
+                "gridIndex": 1,
+                "type": 'category',
+                "boundaryGap": False,
+                "axisLine": { "onZero": True },
+                "data": data.index.tolist(),
+            }
+        ],
+        "yAxis": [
+            {
+                "gridindex": yaxisindex,
+                "name": metadata[col]["label"],
+                "type": 'value',
+                "axisTick": True if yaxisindex == 1 else False
+            } for col, yaxisindex in axesmapping.items()
+        ],
+        "series": [
+            {
+            "name": metadata[col]["label"],
+            "type": 'line',
+            "symbolSize": 8,
+            "xAxisIndex": axesmapping[col],
+            "yAxisIndex": axesmapping[col],
+            "data": data[col].tolist()
+            } for col in axesmapping
+        ]
+    }
+    return update_options_with_user_overrides(_default_line_options(), options)
+
 
 
 def stacked_area(data, metadata):
@@ -46,7 +155,7 @@ def stacked_area(data, metadata):
     ]
     }
     options = {
-        "title": {"text": "堆叠区域图"},
+        "title": {"text": ""},
         "tooltip": {
             "trigger": "axis",
             "axisPointer": {"animation": False},
@@ -70,7 +179,7 @@ def stacked_area(data, metadata):
         "xAxis": [
             {
                 "type": "category",
-                "boundaryGap": False,
+                "boundaryGap": True,
                 "axisLine": {"onZero": True},
                 "data": data.index.tolist(),
             }
@@ -82,18 +191,10 @@ def stacked_area(data, metadata):
                 "type": "line",
                 "name": col,
                 "stack": "stack0",
-                "areastyle": {},
+                "areaStyle": {},
                 "emphasis": {"focus": "series"}
             }
             for col in data.columns
-            # {
-            #     "name": "",
-            #     "type": "line",
-            #     "stack": "1",
-            #     "areaStyle": {},
-            #     "emphasis": {"focus": "series"},
-            #     "data": _y,
-            # } for _y in y
         ],
     }
     options["dataZoom"] = datazoom["dataZoom"]
