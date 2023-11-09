@@ -5,6 +5,8 @@ from dashboard.plots import lines
 
 
 def create(data, metadata, cfg):
+    data = data["SingleKey"]
+    metadata = metadata["SingleKey"]
     select = st.selectbox(
         label="Select time series to display",
         options=data.columns

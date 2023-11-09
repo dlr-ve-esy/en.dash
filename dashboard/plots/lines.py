@@ -93,39 +93,36 @@ def twolinetwoyaxes(data, metadata, axesmapping):
         ],
         "grid": [
             {
-                "left": 60,
+                "left": 150,
                 "right": 50,
                 "height": '35%'
             },
             {
-                "left": 60,
+                "left": 150,
                 "right": 50,
-                "top": '55%',
+                "top": '50%',
                 "height": '35%'
             }
         ],
         "xAxis": [
             {
                 "type": 'category',
+                "gridIndex": axisindex,
                 "boundaryGap": False,
                 "axisLine": { "onZero": True },
+                "axisTick": { "show": False } if axisindex == 0 else {},
+                "axisLabel": { "show": False } if axisindex == 0 else {},
                 "data": data.index.tolist()
-            },
-            {
-                "gridIndex": 1,
-                "type": 'category',
-                "boundaryGap": False,
-                "axisLine": { "onZero": True },
-                "data": data.index.tolist(),
-            }
+            } for axisindex in axesmapping.values()
         ],
         "yAxis": [
             {
-                "gridindex": yaxisindex,
+                "gridIndex": axisindex,
                 "name": metadata[col]["label"],
+                "nameLocation": "middle",
+                "nameGap": 75,
                 "type": 'value',
-                "axisTick": True if yaxisindex == 1 else False
-            } for col, yaxisindex in axesmapping.items()
+            } for col, axisindex in axesmapping.items()
         ],
         "series": [
             {
