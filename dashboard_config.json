@@ -4,6 +4,7 @@
     "enable_references": true,
     "references_icon": "list",
     "sidemenu_icon": "layout-text-window-reverse",
+    "data_path": "./data/output.hdf5",
     "tabs": [
         {
             "id": "tab0",

@@ -1,5 +1,8 @@
 import streamlit as st
 import collections.abc
+from streamlit_extras.markdownlit import mdlit
+import pathlib as pt
+import importlib
 
 
 def __update(org, up):
@@ -48,3 +51,43 @@ def update_options_with_defaults(options):
         },
     }
     return __update(options, defaults)
+
+
+def setup_default_tabs(dash_cfg, data, metadata, plots_cfg):
+    for itab in dash_cfg.tabs:
+        if itab.id in ["references"]:
+            continue
+        if st.session_state["active_tab"] == itab.id:
+            st.header(dash_cfg.tabs[0].label)
+            if itab.display_infobox:
+                with st.expander(
+                    f"{itab.display_icon} {itab.display_label}",
+                    expanded=itab.display_enabled,
+                ):
+                    st.markdown(
+                        itab.text
+                        if itab.text is not None
+                        else "".join(itab.path.open().readlines())
+                    )
+            itab.tab_ref.create(data, metadata, plots_cfg)
+
+
+def add_reference_widget(dash_cfg):
+    if dash_cfg.enable_references:
+        if st.session_state["active_tab"] == dash_cfg.tabs[-1].id:
+            st.header(dash_cfg.tabs[-1].label)
+            txt = "These are the references:\n\n"
+            refs = "".join(["- {}\n\n"] * len(dash_cfg.references))
+            mdlit(txt + refs.format(*dash_cfg.references))
+
+
+def load_tab_modules():
+    tab_hooks = {}
+
+    for i in pt.Path("./dashboard/tabs").glob("tab_*.py"):
+        spec = importlib.util.spec_from_file_location(f"dashboard.tabs.{i.stem}", i)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        tab_hooks[i.stem[4:]] = mod
+
+    return tab_hooks

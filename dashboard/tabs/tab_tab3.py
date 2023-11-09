@@ -21,51 +21,51 @@ def create(data, metadata, plots_cfg):
         st.write("this is a nav bar")
 
     with plotarea:
-        with chart_container(pd.DataFrame(data)):
-            options = {
-                "title": {
-                    "text": "scattering the scatters",
-                    "left": "center",
-                    "textStyle": {
-                        "color": "#999",
-                        "fontWeight": "normal",
-                        "fontSize": 14,
-                    },
+        chart_container(pd.DataFrame(data), tabs=["Export"])
+        options = {
+            "title": {
+                "text": "scattering the scatters",
+                "left": "center",
+                "textStyle": {
+                    "color": "#999",
+                    "fontWeight": "normal",
+                    "fontSize": 14,
                 },
-                "tooltip": {"position": "top"},
-                "visualMap": {
-                    "min": 0,
-                    "max": 1000,
-                    "text": ["high", "low"],
-                    "realtime": True,
-                    "calculable": True,
-                    "left": "2px",
-                    "top": "20px",
-                },
-                "grid": {"left": "200px"},
-                "xAxis": {},
-                "yAxis": {},
-                "series": {
-                    # "symbolSize": JsCode("function (val) { return val[1] * 0.01;}").js_code,
-                    "symbolSize": 10,
-                    "data": data.T.tolist(),
-                    "type": "scatter",
-                    "encode": {"tooltip": [0, 1]},
-                },
-            }
-            user = delete_barred_user_overrides(
-                plots_cfg["experimental_plot"],
-                {
-                    "xAxis": None,
-                    "yAxis": None,
-                },
-            )
-            options = update_options_with_user_overrides(options, user)
-            options = update_options_with_defaults(options)
+            },
+            "tooltip": {"position": "top"},
+            "visualMap": {
+                "min": 0,
+                "max": 1000,
+                "text": ["high", "low"],
+                "realtime": True,
+                "calculable": True,
+                "left": "2px",
+                "top": "20px",
+            },
+            "grid": {"left": "200px"},
+            "xAxis": {},
+            "yAxis": {},
+            "series": {
+                # "symbolSize": JsCode("function (val) { return val[1] * 0.01;}").js_code,
+                "symbolSize": 10,
+                "data": data.T.tolist(),
+                "type": "scatter",
+                "encode": {"tooltip": [0, 1]},
+            },
+        }
+        user = delete_barred_user_overrides(
+            plots_cfg["experimental_plot"],
+            {
+                "xAxis": None,
+                "yAxis": None,
+            },
+        )
+        options = update_options_with_user_overrides(options, user)
+        options = update_options_with_defaults(options)
 
-            st_echarts(
-                options=options,
-                theme="dark",
-                height="500px",
-                width="700px",
-            )
+        st_echarts(
+            options=options,
+            theme="dark",
+            height="500px",
+            width="700px",
+        )

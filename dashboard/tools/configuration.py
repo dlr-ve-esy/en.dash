@@ -33,6 +33,7 @@ class DashboardConfiguration:
     dashboard_label: str = field(default="title of dashboard")
     references_icon: str = field(default="list")
     sidemenu_icon: str = field(default="layout-text-window-reverse")
+    data_path: pt.Path = field(default="./data/data.h5f")
 
     @classmethod
     def load(cls, path: pt.Path):
@@ -47,3 +48,27 @@ class DashboardConfiguration:
         data = cattr.unstructure(self)
         with path.open("w") as opf:
             json.dump(data, opf)
+
+    def prepare(self, tab_hooks):
+        if self.enable_references:
+            if self.tabs[-1].id != "references":
+                self.tabs.append(
+                    TabData("references", "References", self.references_icon)
+                )
+
+        for itab in self.tabs:
+            if itab.id in tab_hooks:
+                itab.tab_ref = tab_hooks[itab.id]
+            itab.display_infobox = True
+            if itab.text is None and itab.path is None:
+                itab.display_infobox = False
+            elif itab.path is not None and not itab.path.exists():
+                itab.display_infobox = False
+
+
+def load_plots_config(path: pt.Path):
+    plots_cfg = collections.defaultdict(dict)
+    for ifile in path.glob("*.json"):
+        cfg_data = json.load(ifile.open("r"))
+        plots_cfg[ifile.stem] = cfg_data
+    return plots_cfg
