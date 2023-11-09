@@ -11,5 +11,7 @@ idx = pd.IndexSlice
 
 
 def create(data, metadata, cfg):
+    data = data["SingleKey"]
+    metadata = metadata["SingleKey"]
     heat_options = heatmaps.heatmap(data, metadata)
     st_echarts(heat_options)
