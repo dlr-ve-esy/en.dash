@@ -113,6 +113,7 @@ def create(data, metadata, cfg):
                 }
             }
             options = update_options_with_user_overrides(options, options_update)
+            options = update_options_with_user_overrides(options, cfg["installed_power_plot"])
             options = update_options_with_defaults(options)
 
             for series_item in options['series']:
