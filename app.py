@@ -1,19 +1,14 @@
 import streamlit as st
 import numpy as np
 import pathlib as pt
-from dashboard.tabs import tab_tab0, tab_tab1, tab_tab2, tab_tab3, tab_tab4, tab_tab5
 from dashboard.layout import sidebar
 import pandas as pd
 import json
 from dashboard.tools.configuration import DashboardConfiguration, TabData
 from streamlit_extras.markdownlit import mdlit
 from collections import defaultdict
-from streamlit_extras.app_logo import add_logo
 from PIL import Image
 import dashboard.tabs
-
-# from st_btn_select import st_btn_select
-import streamlit_scrollable_textbox as stx
 
 from streamlit_option_menu import option_menu
 
