@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 import pathlib as pt
-from dashboard.tabs import tab0, tab1, tab2, tab3, tab4
+from dashboard.tabs import tab0, tab1, tab2, tab3, tab4, tab5
 from dashboard.layout import sidebar
 import pandas as pd
 import json
@@ -32,11 +32,11 @@ def load_data(path: pt.Path) -> dict:
         datasets["Dispatch"] = load.get(hdfpackage_path)
         metadata["Dispatch"] = get_meta(load, hdfpackage_path)
 
-        hdfpackage_path = 'Bar/Capacity'
+        hdfpackage_path = "Bar/Capacity"
         df = load.get(hdfpackage_path).reset_index()
         df2 = df.copy()
-        df2['Year'] = 2020
-        df2['InstalledPower'] = df['InstalledPower'] + 100
+        df2["Year"] = 2020
+        df2["InstalledPower"] = df["InstalledPower"] + 100
         df_new = pd.concat([df, df2])
         datasets["inst_power"] = df_new
         metadata["inst_power"] = get_meta(load, hdfpackage_path)
@@ -69,19 +69,23 @@ if __name__ == "__main__":
 
     data, metadata = load_data(pt.Path("./data/output.hdf5"))
 
-    with st.sidebar:
-        sidebar.create(dash_cfg)
-
-    root = st.container()
-
     if "active_tab" not in st.session_state:
         st.session_state["active_tab"] = dash_cfg.tabs[0].id
 
+    with st.sidebar:
+        sidebar.create(dash_cfg)
+        for idx, (_, itab) in enumerate(dash_cfg.tabs):
+            res = st.button(f":bar_chart: {itab}", use_container_width=True)
+            if res:
+                st.session_state["active_tab"] = dash_cfg.tabs[idx].id
+
+    root = st.container()
+
     with root:
-        with st.sidebar:
-            st.session_state["active_tab"] = st.radio(
-                label="select view", options=[i[0] for i in dash_cfg.tabs]
-            )
+        # with st.sidebar:
+        #     st.session_state["active_tab"] = st.radio(
+        #         label="select view", options=[i[0] for i in dash_cfg.tabs]
+        #     )
 
         if st.session_state["active_tab"] == dash_cfg.tabs[0].id:
             st.header(dash_cfg.tabs[0].label)
@@ -98,6 +102,9 @@ if __name__ == "__main__":
         if st.session_state["active_tab"] == dash_cfg.tabs[4].id:
             st.header(dash_cfg.tabs[4].label)
             tab4.create(data["Dispatch"], metadata["Dispatch"])
+        if st.session_state["active_tab"] == dash_cfg.tabs[5].id:
+            st.header(dash_cfg.tabs[5].label)
+            tab5.create(data["SingleKey"], metadata["SingleKey"])
 
         if dash_cfg.enable_references:
             if st.session_state["active_tab"] == dash_cfg.tabs[-1].id:
@@ -105,3 +112,15 @@ if __name__ == "__main__":
                 txt = "These are the references:\n\n"
                 refs = "".join(["- {}\n\n"] * len(dash_cfg.references))
                 mdlit(txt + refs.format(*dash_cfg.references))
+
+    with st.sidebar:
+        with st.expander("Options"):
+            if dash_cfg.enable_darkmode_toggle:
+                darkmode_enabled = st.toggle("enable dark mode for plots")
+            else:
+                darkmode_enabled = False
+
+        if darkmode_enabled:
+            st.session_state["style"] = "dark"
+        else:
+            st.session_state["style"] = "light"

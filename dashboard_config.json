@@ -1,4 +1,5 @@
 {
+    "dashboard_label": "Our nice dashboard",
     "enable_darkmode_toggle": true,
     "enable_references": true,
     "tabs": [
@@ -21,6 +22,10 @@
         {
             "id": "tab4",
             "label": "Tab Five"
+        },
+        {
+            "id": "tab5",
+            "label": "Tab Six"
         }
     ],
     "references": [
