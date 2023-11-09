@@ -26,7 +26,7 @@ class BarplotSimple():
             },
             'yAxis': {
                 'type': 'value',
-                'name': f'{self.metadata[y_col]["label"]} in {self.metadata[y_col]["unit"]}',
+                # 'name': f'{self.metadata[y_col]["label"]} in {self.metadata[y_col]["unit"]}',
                 'nameLocation': 'middle',
                 'nameGap': 50
             },
@@ -88,7 +88,7 @@ class BarplotGrouped():
             },
             'yAxis': {
                 'type': 'value',
-                'name': f'{self.metadata[y_col]["label"]} in {self.metadata[y_col]["unit"]}',
+                # 'name': f'{self.metadata[y_col]["label"]} in {self.metadata[y_col]["unit"]}',
                 'nameLocation': 'middle',
                 'nameGap': 50
             },
@@ -145,7 +145,7 @@ class BarplotStacked():
             },
             'yAxis': {
                 'type': 'value',
-                'name': f'{self.metadata[y_col]["label"]} in {self.metadata[y_col]["unit"]}',
+                # 'name': f'{self.metadata[y_col]["label"]} in {self.metadata[y_col]["unit"]}',
                 'nameLocation': 'middle',
                 'nameGap': 50
             },
@@ -205,7 +205,7 @@ class BarplotGroupedStacked():
             },
             'yAxis': {
                 'type': 'value',
-                'name': f'{self.metadata[y_col]["label"]} in {self.metadata[y_col]["unit"]}',
+                # 'name': f'{self.metadata[y_col]["label"]} in {self.metadata[y_col]["unit"]}',
                 'nameLocation': 'middle',
                 'nameGap': 50
             },
