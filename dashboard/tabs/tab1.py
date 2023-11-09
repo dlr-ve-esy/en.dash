@@ -22,120 +22,80 @@ def create(data, metadata):
             )
         return filters_value
     
-    plot_type = st.multiselect(
+    plot_type = st.selectbox(
         label='Plot type',
-        options=['simple', 'grouped', 'staced']
+        options=['simple', 'grouped', 'stacked', 'grouped & stacked'],
     )
 
+    # plot_type = 'grouped'
     if plot_type == 'simple':
-        pass
+        config_plot = {
+            'x': 'Year',
+            'y': 'InstalledPower',
+            'filters': ['Technology', 'Region']
+        }
+        data_plot = data.reset_index()
+        filters_value = add_filters(config_plot, data_plot)
+        for filter, value in filters_value.items():
+            con = data_plot[filter] == value
+            data_plot = data_plot.loc[con]
+        data_plot = data_plot[[config_plot['x'], config_plot['y']]]
+        data_plot.columns = ['x', 'y']
+        s = BarplotSimple(data_plot)
+        options = s.build_options()
     elif plot_type == 'grouped':
-        pass
+        config_plot = {
+            'x': 'Year',
+            'y': 'InstalledPower',
+            'filters': ['Region'],
+            'groups': 'Technology'
+        }
+        data_plot = data.reset_index()
+        filters_value = add_filters(config_plot, data_plot)
+        for filter, value in filters_value.items():
+            con = data_plot[filter] == value
+            data_plot = data_plot.loc[con]
+        data_plot = data_plot[[config_plot['x'], config_plot['y'], config_plot['groups']]]
+        data_plot.columns = ['x', 'y', 'groups']
+        s = BarplotGrouped(data_plot)
+        options = s.build_options()
     elif plot_type == 'stacked':
-        pass
+        config_plot = {
+            'x': 'Year',
+            'y': 'InstalledPower',
+            'filters': ['Region'],
+            'stacks': 'Technology'
+        }
+        data_plot = data.reset_index()
+        filters_value = add_filters(config_plot, data_plot)
+        for filter, value in filters_value.items():
+            con = data_plot[filter] == value
+            data_plot = data_plot.loc[con]
+        data_plot = data_plot[[config_plot['x'], config_plot['y'], config_plot['stacks']]]
+        data_plot.columns = ['x', 'y', 'stacks']
+        s = BarplotStacked(data_plot)
+        options = s.build_options()
+    elif plot_type == 'grouped & stacked':
+        config_plot = {
+            'x': 'Year',
+            'y': 'InstalledPower',
+            'groups': 'Region',
+            'stacks': 'Technology'
+        }
+        data_plot = data.reset_index()
+        filters_value = add_filters(config_plot, data_plot)
+        for filter, value in filters_value.items():
+            con = data_plot[filter] == value
+            data_plot = data_plot.loc[con]
+        data_plot = data_plot[[config_plot['x'], config_plot['y'], config_plot['stacks']]]
+        data_plot.columns = ['x', 'y', 'stacks']
+        s = BarplotStacked(data_plot)
+        options = s.build_options()
+    else:
+        options = {}
 
-    
-    # data_plot1 = data['data1']
-    # config_barplot1 = {
-    #     'title': 'Installable Capacities',
-    #     'x': 'Year',
-    #     'y': 'InstalledPower',
-    #     'filters': ['Technology', 'Region']
-    # }
-    # st.header(config_barplot1['title'])
-    # filters_value_plot1 = add_filters(config_barplot1, data_plot1)
-    # for filter, value in filters_value_plot1.items():
-    #     con = data_plot1[filter] == value
-    #     data_plot1 = data_plot1.loc[con]
-    # data_plot1 = data_plot1[[config_barplot1['x'], config_barplot1['y']]]
-    # data_plot1.columns = ['x', 'y']
-    # s = BarplotSimple(data_plot1)
-    # options = s.gen_options()
-    # options = update_options_with_defaults(options)
-    # st_echarts(options=options, height="400px")
+    st.header('Installable Capacities')
 
-    # data_plot2 = data['data2']
-    # config_barplot2 = {
-    #     'title': 'Installable Capacities',
-    #     'x': 'Year',
-    #     'y': 'InstalledPower',
-    #     'filters': ['Region'],
-    #     'group': 'Technology'
-    # }
-    # st.header(config_barplot2['title'])
-    # filters_value_plot2 = add_filters(config_barplot2, data_plot2)
-    # for filter, value in filters_value_plot2.items():
-    #     con = data_plot2[filter] == value
-    #     data_plot2 = data_plot2.loc[con]
-    # data_plot2 = data_plot2[[config_barplot2['x'], config_barplot2['y'], config_barplot2['stack']]]
-    # data_plot2.columns = ['x', 'y', 'stack']
-    # s = BarplotGrouped(data_plot2)
-    # options = s.gen_options()
-    # options = update_options_with_defaults(options)
-    # st_echarts(options=options, height="400px")
-
-    # data_plot2 = data['data3']
-    # config_barplot2 = {
-    #     'title': 'Installable Capacities',
-    #     'x': 'Year',
-    #     'y': 'InstalledPower',
-    #     'filters': ['Region', 'Technology'],
-    #     'stack': 'Technology'
-    # }
-    # st.header(config_barplot2['title'])
-    # filters_value_plot2 = add_filters(config_barplot2, data_plot2)
-    # for filter, value in filters_value_plot2.items():
-    #     con = data_plot2[filter] == value
-    #     data_plot2 = data_plot2.loc[con]
-    # data_plot2 = data_plot2[[config_barplot2['x'], config_barplot2['y'], config_barplot2['stack']]]
-    # data_plot2.columns = ['x', 'y', 'groups']
-    # s = BarplotGrouped(data_plot2)
-    # options = s.gen_options()
-    # options = update_options_with_defaults(options)
-    # st_echarts(options=options, height="400px")
-
-    # st.multiselect()
-
-    # data_plot = data.reset_index()
-    # config_barplot = {
-    #     'title': 'Installable Capacities',
-    #     'x': 'Year',
-    #     'y': 'InstalledPower',
-    #     'filters': ['Region'],
-    #     'stack': 'Technology'
-    # }
-    # st.header(config_barplot['title'])
-    # filters_value_plot2 = add_filters(config_barplot, data_plot)
-    # for filter, value in filters_value_plot2.items():
-    #     con = data_plot[filter] == value
-    #     data_plot = data_plot.loc[con]
-    # data_plot = data_plot[[config_barplot['x'], config_barplot['y'], config_barplot['stack']]]
-    # data_plot.columns = ['x', 'y', 'groups']
-    # s = BarplotGrouped(data_plot)
-    # options = s.gen_options()
-    # options = update_options_with_defaults(options)
-    # st_echarts(options=options, height="400px")
-
-
-
-
-    data_plot = data.reset_index()
-    config_barplot = {
-        'title': 'Installable Capacities',
-        'x': 'Year',
-        'y': 'InstalledPower',
-        'filters': ['Region'],
-        'stacks': 'Technology'
-    }
-    st.header(config_barplot['title'])
-    filters_value_plot2 = add_filters(config_barplot, data_plot)
-    for filter, value in filters_value_plot2.items():
-        con = data_plot[filter] == value
-        data_plot = data_plot.loc[con]
-    data_plot = data_plot[[config_barplot['x'], config_barplot['y'], config_barplot['stacks']]]
-    data_plot.columns = ['x', 'y', 'stacks']
-    s = BarplotStacked(data_plot)
-    options = s.gen_options()
     options = update_options_with_defaults(options)
     st_echarts(options=options, height="400px")
 
