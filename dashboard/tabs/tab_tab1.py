@@ -9,6 +9,9 @@ import pandas as pd
 
 
 def create(data, metadata, cfg):
+    data = data['inst_power']
+    metadata = metadata['inst_power']
+    cfg = cfg['installed_power_plot']
 
     def add_filters(config, data):
         filters_value = dict()
@@ -113,25 +116,32 @@ def create(data, metadata, cfg):
                 }
             }
             options = update_options_with_user_overrides(options, options_update)
-            options = update_options_with_user_overrides(options, cfg["installed_power_plot"])
+            options = update_options_with_user_overrides(options, cfg)
             options = update_options_with_defaults(options)
 
-            for series_item in options['series']:
-                insert = {
-                    'label': {
-                        'show': False,
-                        'position': 'top',
-                        'rotate': 90,
-                        'formatter': '{c}  {name|{a}}',
-                        'fontSize': 16,
-                        'rich': {
-                            'name': {}
-                        }
+            if plot_type != 'simple':
+                for series_item in options['series']:
+                    insert = {
+                        # 'label': {
+                        #     'show': True,
+                        #     'align': 'right',
+                        #     'position': 'bottom',
+                        #     'rotate': 90,
+                        #     'verticalAlign': 'middle',
+                        #     'formatter': '{a}',
+                        # }
+                        # 'stackLabel': {
+                        #     'show': True,
+                        #     'align': 'right',
+                        #     'position': 'bottom',
+                        #     'rotate': 90,
+                        #     'verticalAlign': 'middle',
+                        #     'formatter': '{a}',
+                        # }
                     }
-                }
-                series_item.update(insert)
+                    series_item.update(insert)
 
-            st_echarts(options=options, height="400px")
+            st_echarts(options=options, height="500px")
  
 
 

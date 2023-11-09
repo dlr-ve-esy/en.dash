@@ -8,13 +8,44 @@ def _default_barplot_options():
                 'type': 'shadow'
             }
         },
+        'grid': {
+            'top': '25%',
+            'left': '5%',
+            'right': '5%',
+            'bottom': '25%',
+            'containLabel': True
+        },
         'xAxis': {
             'type': 'category',
+            'axisLabel': {
+                'show': True,
+                # 'align': 'right',
+                # 'position': 'bottom',
+                # 'rotate': 90,
+                # 'verticalAlign': 'middle',
+                # 'verticalAlign': 'bottom',
+                'verticalAlign': 'top',
+                # 'padding': [90, 90, 90, 90],
+                # 'margin': [9, 9, 9, 9]
+            },
+            'axisTick': {
+                'show': False
+            },
+            'minorTick': {
+                'show': True
+            }
         },
         'yAxis': {
             'type': 'value',
             'nameLocation': 'middle',
-            'nameGap': 50
+            'nameGap': 50,
+            # 'axisTicks': {
+            #     'show': False
+            # },
+            # 'splitLine':{ 'show': False },
+            # 'axisLine': { 'show': False },
+            'axisTick': { 'show': True },
+            'axisLabel': { 'show': False }
         }
     }
     return options
@@ -77,12 +108,10 @@ def barplot_grouped(data, metadata=None):
     
     options = {
         'legend': {
-            'data': groups
+            'data': groups,
         },
         'xAxis': {
-            # 'data': x + x,
-            # 'data': groups
-            'data': [groups, groups]
+            'data': x,
         },
         'series': series_list
     }
