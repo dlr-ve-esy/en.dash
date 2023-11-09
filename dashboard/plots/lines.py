@@ -93,39 +93,36 @@ def twolinetwoyaxes(data, metadata, axesmapping):
         ],
         "grid": [
             {
-                "left": 60,
+                "left": 150,
                 "right": 50,
                 "height": '35%'
             },
             {
-                "left": 60,
+                "left": 150,
                 "right": 50,
-                "top": '55%',
+                "top": '50%',
                 "height": '35%'
             }
         ],
         "xAxis": [
             {
                 "type": 'category',
+                "gridIndex": axisindex,
                 "boundaryGap": False,
                 "axisLine": { "onZero": True },
+                "axisTick": { "show": False } if axisindex == 0 else {},
+                "axisLabel": { "show": False } if axisindex == 0 else {},
                 "data": data.index.tolist()
-            },
-            {
-                "gridIndex": 1,
-                "type": 'category',
-                "boundaryGap": False,
-                "axisLine": { "onZero": True },
-                "data": data.index.tolist(),
-            }
+            } for axisindex in axesmapping.values()
         ],
         "yAxis": [
             {
-                "gridindex": yaxisindex,
-                "name": metadata[col]["label"],
+                "gridIndex": axisindex,
+                "name": f'{metadata[col]["label"]} in {metadata[col]["unit"]}',
+                "nameLocation": "middle",
+                "nameGap": 75,
                 "type": 'value',
-                "axisTick": True if yaxisindex == 1 else False
-            } for col, yaxisindex in axesmapping.items()
+            } for col, axisindex in axesmapping.items()
         ],
         "series": [
             {
@@ -141,14 +138,60 @@ def twolinetwoyaxes(data, metadata, axesmapping):
     return update_options_with_user_overrides(_default_line_options(), options)
 
 
+def twolinestwoyaxesonesubplot(data, metadata, axesmapping):
+    option = {
+        "tooltip": {
+            "trigger": 'axis',
+            "axisPointer": {
+            "type": 'cross',
+            "crossStyle": {
+                "color": '#999'
+            }
+            }
+        },
+        "toolbox": {
+            "feature": {
+            "dataView": { "show": True, "readOnly": False },
+            "magicType": { "show": True, "type": ['line', 'bar'] },
+            "restore": { "show": True },
+            "saveAsImage": { "show": True }
+            }
+        },
+        "legend": {"data": [metadata[col]["label"] for col in axesmapping]},
+        "xAxis": [
+            {
+            "type": 'category',
+            "data": data.index.tolist(),
+            }
+        ],
+        "yAxis": [
+            {
+            "type": 'value',
+            "name": f'{metadata[col]["label"]} in {metadata[col]["unit"]}',
+            "nameLocation": "middle",
+            "nameGap": 75,
+            "alignTicks": True
+            } for col in axesmapping
+        ],
+        "series": [
+            {
+            "name": metadata[col]["label"],
+            "type": 'line',
+            "yAxisIndex": axisindex,
+            "data": data[col].tolist()
+            } for col, axisindex in axesmapping.items()
+        ]
+    }
+    return update_options_with_user_overrides(_default_line_options(), option)
+
 
 def stacked_area(data, metadata):
     datazoom = {
     "dataZoom": [
         {
             "type": 'slider',
-            "start": 25,
-            "end": 75,
+            "start": 5,
+            "end": 7,
             "xAxisIndex": 0,
             "zoomLock": True
         }

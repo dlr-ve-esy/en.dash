@@ -4,6 +4,7 @@
     "enable_references": true,
     "references_icon": "list",
     "sidemenu_icon": "layout-text-window-reverse",
+    "data_path": "./data/amiris.hdf5",
     "tabs": [
         {
             "id": "tab0",
@@ -35,8 +36,9 @@
         },
         {
             "id": "tab5",
-            "label": "Tab Six",
-            "icon": "bar-chart-line"
+            "label": "Storage levels",
+            "icon": "bar-chart-line",
+            "text": "The storage level indicates the stored energy per hour and day in the selected node in MWh."
         }
     ],
     "references": [

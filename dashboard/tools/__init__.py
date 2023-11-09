@@ -1,50 +1,27 @@
-import streamlit as st
-import collections.abc
+from .configuration import DashboardConfiguration, TabData, load_plots_config
+from .general import load_tab_modules
+from .options import (
+    delete_barred_user_overrides,
+    update_options_with_defaults,
+    update_options_with_user_overrides,
+)
+from .widgets import (
+    add_contact_widget,
+    add_data_download_button,
+    add_reference_widget,
+    setup_default_tabs,
+)
 
-
-def __update(org, up):
-    for k, v in up.items():
-        if isinstance(v, collections.abc.Mapping):
-            org[k] = __update(org.get(k, {}), v)
-        else:
-            org[k] = v
-    return org
-
-
-def __delete(org, dels):
-    for k, v in dels.items():
-        if k not in org:
-            continue
-        if v is None:
-            del org[k]
-        if isinstance(v, collections.abc.Mapping):
-            org[k] = __delete(org[k])
-    return org
-
-
-def delete_barred_user_overrides(options, deletes=None):
-    deletes = deletes if deletes is not None else {}
-    options = __delete(options, deletes)
-    return options
-
-
-def update_options_with_user_overrides(options, user):
-    return __update(options, user)
-
-
-def update_options_with_defaults(options):
-    defaults = {
-        "backgroundColor": "#FFFFFF"
-        if st.session_state["style"] != "dark"
-        else "#0E1117",
-        "toolbox": {
-            "orient": "vertical",
-            "show": True,
-            "feature": {
-                "dataView": {"readOnly": False},
-                "restore": {},
-                "saveAsImage": {},
-            },
-        },
-    }
-    return __update(options, defaults)
+__all__ = [
+    "DashboardConfiguration",
+    "TabData",
+    "load_tab_modules",
+    "delete_barred_user_overrides",
+    "update_options_with_defaults",
+    "update_options_with_user_overrides",
+    "add_contact_widget",
+    "add_data_download_button",
+    "add_reference_widget",
+    "setup_default_tabs",
+    "load_plots_config",
+]

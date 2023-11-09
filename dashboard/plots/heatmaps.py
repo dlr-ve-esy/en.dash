@@ -4,13 +4,13 @@ import pandas as pd
 
 def heatmap(data, metadata):
 
-
     hours = [f"{i:0>2}" for i in range(24)]
     days = list(range(1, 365))
-
+    col = data.name
+    data = data.to_frame()
     data["_datetime"] = pd.to_datetime(data.index)
-    col = "StoredEnergy_Austria"
-    df = data[["_datetime", col]].groupby(
+
+    df = data.groupby(
         [data["_datetime"].dt.dayofyear, data["_datetime"].dt.hour]
     )[col].sum()
     df.index.names = ["day", "hour"]
@@ -26,12 +26,15 @@ def heatmap(data, metadata):
         "position": 'top'
     },
     "grid": {
-        "height": '50%',
+        "height": '75%',
         "top": '10%'
     },
     "yAxis": {
         "type": 'category',
         "data": hours,
+        "name": "Hour of the day",
+        "nameLocation": "middle",
+        "nameGap": 50,
         "splitArea": {
         "show": True
         }
@@ -39,21 +42,22 @@ def heatmap(data, metadata):
     "xAxis": {
         "type": 'category',
         "data": days,
-        "splitArea": {
-        "show": True
-        }
+        "name": "Day of the year",
+        "nameLocation": "middle",
+        "nameGap": 25,
+        "splitArea": {"show": True}
     },
     "visualMap": {
         "min": lower_bound,
         "max": upper_bound,
         "calculable": True,
-        "orient": 'horizontal',
-        "left": 'center',
-        "bottom": '15%'
+        "orient": 'vertical',
+        "top": 'center',
+        "left": '90%'
     },
     "series": [
         {
-        "name": 'Punch Card',
+        "name": metadata[col]["label"],
         "type": 'heatmap',
         "data": data,
         "label": {

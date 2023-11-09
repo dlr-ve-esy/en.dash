@@ -5,6 +5,8 @@ from dashboard.plots import lines
 
 
 def create(data, metadata, cfg):
+    data = data["SingleKey"]
+    metadata = metadata["SingleKey"]
     select = st.selectbox(
         label="Select time series to display",
         options=data.columns
@@ -33,6 +35,13 @@ def create(data, metadata, cfg):
         "AwardedEnergy_Austria": 1
     }
     line_options = lines.twolinetwoyaxes(
+        data=df,
+        metadata=metadata,
+        axesmapping=line_y_axis_map
+    )
+    st_echarts(line_options, height=500)
+
+    line_options = lines.twolinestwoyaxesonesubplot(
         data=df,
         metadata=metadata,
         axesmapping=line_y_axis_map
