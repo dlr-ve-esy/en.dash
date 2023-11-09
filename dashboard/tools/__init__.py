@@ -46,7 +46,6 @@ def update_options_with_defaults(options):
             "feature": {
                 "dataView": {"readOnly": False},
                 "restore": {},
-                "saveAsImage": {},
             },
         },
     }
