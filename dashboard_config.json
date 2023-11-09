@@ -2,30 +2,41 @@
     "dashboard_label": "Our nice dashboard",
     "enable_darkmode_toggle": true,
     "enable_references": true,
+    "references_icon": "list",
+    "sidemenu_icon": "layout-text-window-reverse",
     "tabs": [
         {
             "id": "tab0",
-            "label": "Tab One"
+            "label": "Tab One",
+            "icon": "bar-chart-line",
+            "text": "my long big fat **text**",
+            "display_enabled": false
         },
         {
             "id": "tab1",
-            "label": "Tab Two"
+            "label": "Tab Two",
+            "icon": "bar-chart-line",
+            "path": "./test.md"
         },
         {
             "id": "tab2",
-            "label": "Tab Three"
+            "label": "Tab Three",
+            "icon": "bar-chart-line"
         },
         {
             "id": "tab3",
-            "label": "Tab Four"
+            "label": "Tab Four",
+            "icon": "bar-chart-line"
         },
         {
             "id": "tab4",
-            "label": "Tab Five"
+            "label": "Tab Five",
+            "icon": "bar-chart-line"
         },
         {
             "id": "tab5",
-            "label": "Tab Six"
+            "label": "Tab Six",
+            "icon": "bar-chart-line"
         }
     ],
     "references": [

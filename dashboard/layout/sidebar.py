@@ -5,18 +5,14 @@ from dashboard.tools.configuration import DashboardConfiguration
 
 
 def create(dash_cfg: DashboardConfiguration):
-    if "style" not in st.session_state:
-        st.session_state["style"] = "dark"
-
     if st.session_state["style"] == "dark":
         logo = Image.open("data/column-chart-line-icon-black.png")
         logo = logo.resize((150, 100))
 
-        st.image(logo)
-    else:
+        st.image(logo, output_format="png")
+    elif st.session_state["style"] == "light":
         logo = Image.open("data/column-chart-line-icon-white.png")
         logo = logo.resize((150, 100))
 
-        st.image(logo)
-
-    st.write(dash_cfg.dashboard_label)
+        st.image(logo, output_format="png")
+    st.header(dash_cfg.dashboard_label)

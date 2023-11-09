@@ -1,13 +1,25 @@
 import streamlit as st
 import numpy as np
 import pathlib as pt
-from dashboard.tabs import tab0, tab1, tab2, tab3, tab4, tab5
+from dashboard.tabs import tab_tab0, tab_tab1, tab_tab2, tab_tab3, tab_tab4, tab_tab5
 from dashboard.layout import sidebar
 import pandas as pd
 import json
 from dashboard.tools.configuration import DashboardConfiguration, TabData
 from streamlit_extras.markdownlit import mdlit
 from collections import defaultdict
+from streamlit_extras.app_logo import add_logo
+from PIL import Image
+import dashboard.tabs
+
+# from st_btn_select import st_btn_select
+import streamlit_scrollable_textbox as stx
+
+from streamlit_option_menu import option_menu
+
+tab_hooks = {
+    i[4:]: getattr(dashboard.tabs, i) for i in dir(dashboard.tabs) if i[0:4] == "tab_"
+}
 
 
 def get_meta(store: object, hdfpackage_path: str) -> dict:
@@ -54,16 +66,28 @@ def load_data(path: pt.Path) -> dict:
 if __name__ == "__main__":
     dash_cfg = DashboardConfiguration.load(pt.Path("./dashboard_config.json"))
 
+    if dash_cfg.enable_references:
+        if dash_cfg.tabs[-1].id != "references":
+            dash_cfg.tabs.append(
+                TabData("references", "References", dash_cfg.references_icon)
+            )
+
+    for itab in dash_cfg.tabs:
+        if itab.id in tab_hooks:
+            itab.tab_ref = tab_hooks[itab.id]
+        itab.display_infobox = True
+        if itab.text is None and itab.path is None:
+            itab.display_infobox = False
+        elif itab.path is not None and not itab.path.exists():
+            itab.display_infobox = False
+
     plots_cfg = defaultdict(dict)
     for ifile in pt.Path("./configurations").glob("*.json"):
         cfg_data = json.load(ifile.open("r"))
         plots_cfg[ifile.stem] = cfg_data
 
-    if dash_cfg.tabs[-1].id != "references":
-        dash_cfg.tabs.append(TabData("references", "References"))
-
     if "style" not in st.session_state:
-        st.session_state["style"] = "dark"
+        st.session_state["style"] = "light"
 
     st.set_page_config(page_title="sfc dashboard", layout="wide")
 
@@ -72,39 +96,61 @@ if __name__ == "__main__":
     if "active_tab" not in st.session_state:
         st.session_state["active_tab"] = dash_cfg.tabs[0].id
 
+    # tab_management = {k: v for k, v in zip(dash_cfg.tabs, tab_hooks)}
     with st.sidebar:
-        sidebar.create(dash_cfg)
-        for idx, (_, itab) in enumerate(dash_cfg.tabs):
-            res = st.button(f":bar_chart: {itab}", use_container_width=True)
-            if res:
-                st.session_state["active_tab"] = dash_cfg.tabs[idx].id
+        if st.session_state["style"] == "dark":
+            logo = Image.open("data/column-chart-line-icon-white.png")
+            logo = logo.resize((150, 100))
+
+            st.image(logo, output_format="png")
+        elif st.session_state["style"] == "light":
+            logo = Image.open("data/column-chart-line-icon-black.png")
+            logo = logo.resize((150, 100))
+
+            st.image(logo, output_format="png")
+
+        selected = option_menu(
+            dash_cfg.dashboard_label,
+            [i.label for i in dash_cfg.tabs],
+            icons=[i.icon for i in dash_cfg.tabs],  # bootstrap icons
+            menu_icon=dash_cfg.sidemenu_icon,
+            default_index=1,
+        )
+
+        for i in dash_cfg.tabs:
+            if i.label == selected:
+                st.session_state["active_tab"] = i.id
+
+        with st.expander("Options"):
+            if dash_cfg.enable_darkmode_toggle:
+                darkmode_enabled = st.toggle("enable dark mode for plots")
+            else:
+                darkmode_enabled = False
+
+            if darkmode_enabled:
+                st.session_state["style"] = "dark"
+            else:
+                st.session_state["style"] = "light"
 
     root = st.container()
 
     with root:
-        # with st.sidebar:
-        #     st.session_state["active_tab"] = st.radio(
-        #         label="select view", options=[i[0] for i in dash_cfg.tabs]
-        #     )
-
-        if st.session_state["active_tab"] == dash_cfg.tabs[0].id:
-            st.header(dash_cfg.tabs[0].label)
-            tab0.create(data["SingleKey"], metadata["SingleKey"])
-        if st.session_state["active_tab"] == dash_cfg.tabs[1].id:
-            st.header(dash_cfg.tabs[1].label)
-            tab1.create(data["inst_power"], metadata["inst_power"])
-        if st.session_state["active_tab"] == dash_cfg.tabs[2].id:
-            st.header(dash_cfg.tabs[2].label)
-            tab2.create(data)
-        if st.session_state["active_tab"] == dash_cfg.tabs[3].id:
-            st.header(dash_cfg.tabs[3].label)
-            tab3.create(data["dataset1"], metadata, plots_cfg)
-        if st.session_state["active_tab"] == dash_cfg.tabs[4].id:
-            st.header(dash_cfg.tabs[4].label)
-            tab4.create(data["Dispatch"], metadata["Dispatch"])
-        if st.session_state["active_tab"] == dash_cfg.tabs[5].id:
-            st.header(dash_cfg.tabs[5].label)
-            tab5.create(data["SingleKey"], metadata["SingleKey"])
+        for itab in dash_cfg.tabs:
+            if itab.id in ["references"]:
+                continue
+            if st.session_state["active_tab"] == itab.id:
+                st.header(dash_cfg.tabs[0].label)
+                if itab.display_infobox:
+                    with st.expander(
+                        f"{itab.display_icon} {itab.display_label}",
+                        expanded=itab.display_enabled,
+                    ):
+                        st.markdown(
+                            itab.text
+                            if itab.text is not None
+                            else "".join(itab.path.open().readlines())
+                        )
+                itab.tab_ref.create(data, metadata, plots_cfg)
 
         if dash_cfg.enable_references:
             if st.session_state["active_tab"] == dash_cfg.tabs[-1].id:
@@ -112,15 +158,3 @@ if __name__ == "__main__":
                 txt = "These are the references:\n\n"
                 refs = "".join(["- {}\n\n"] * len(dash_cfg.references))
                 mdlit(txt + refs.format(*dash_cfg.references))
-
-    with st.sidebar:
-        with st.expander("Options"):
-            if dash_cfg.enable_darkmode_toggle:
-                darkmode_enabled = st.toggle("enable dark mode for plots")
-            else:
-                darkmode_enabled = False
-
-        if darkmode_enabled:
-            st.session_state["style"] = "dark"
-        else:
-            st.session_state["style"] = "light"
