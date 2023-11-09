@@ -11,6 +11,9 @@ import pandas as pd
 
 
 def create(data, metadata, plots_cfg):
+    data = data["dataset1"]
+    metadata = metadata["dataset1"]
+
     st.subheader("test plots")
     navbar, plotarea = st.columns([0.2, 0.8])
 
