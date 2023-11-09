@@ -3,6 +3,7 @@ import collections.abc
 from streamlit_extras.markdownlit import mdlit
 import pathlib as pt
 import importlib
+import pandas as pd
 
 
 def __update(org, up):
@@ -90,3 +91,14 @@ def load_tab_modules():
         tab_hooks[i.stem[4:]] = mod
 
     return tab_hooks
+
+
+def add_data_download_button(
+    data: pd.DataFrame, file_name="data", label="download data"
+):
+    st.download_button(
+        label,
+        data.to_csv().encode("utf-8"),
+        f"{file_name}.csv",
+        "text/csv",
+    )
