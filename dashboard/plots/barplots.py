@@ -7,8 +7,11 @@ class BarplotSimple():
         self.metadata = metadata
 
     def build_options(self):
-        x = list(self.data['x'])
-        y = list(self.data['y'])
+        x_col = self.data.columns[0]
+        y_col = self.data.columns[1]
+
+        x = list(self.data[x_col])
+        y = list(self.data[y_col])
 
         options = {
             'tooltip': {
@@ -22,7 +25,10 @@ class BarplotSimple():
                 'data': x
             },
             'yAxis': {
-                'type': 'value'
+                'type': 'value',
+                # 'name': f'{self.metadata[y_col]["label"]} in {self.metadata[y_col]["unit"]}',
+                'nameLocation': 'middle',
+                'nameGap': 50
             },
             'series': [
                 {
@@ -42,21 +48,18 @@ class BarplotGrouped():
         self.metadata = metadata
 
     def build_options(self):
-        x = list(self.data.astype(str)['x'].unique())
-        ys = dict()
-        groups = self.data['groups']
-        groups = list(groups.unique())
-        print(self.data)
-        print(groups)
-        for name, s in self.data.groupby('groups'):
-            y = list(s['y'])
-            ys[name] = y
-    
-        series_list = list()
+        x_col = self.data.columns[0]
+        y_col = self.data.columns[1]
+        g_col = self.data.columns[2]
 
-        for name, y in ys.items():
+        x = list(self.data[x_col].astype(str).unique())
+
+        series_list = list()
+        groups = list(self.data[g_col].unique())
+        for selection, s in self.data.groupby(g_col):
+            y = list(s[y_col])
             d = {
-                'name': name,
+                'name': selection,
                 'type': 'bar',
                 'barGap': '0',
                 'label': {
@@ -84,7 +87,10 @@ class BarplotGrouped():
                 'data': x
             },
             'yAxis': {
-                'type': 'value'
+                'type': 'value',
+                # 'name': f'{self.metadata[y_col]["label"]} in {self.metadata[y_col]["unit"]}',
+                'nameLocation': 'middle',
+                'nameGap': 50
             },
             'series': series_list
         }
@@ -99,18 +105,17 @@ class BarplotStacked():
         self.metadata = metadata
 
     def build_options(self):
-        x = list(self.data.astype(str)['x'].unique())
-        ys = dict()
-        stacks = self.data['stacks']
-        groups = list(stacks.unique())
-        for name, s in self.data.groupby('stacks'):
-            y = list(s['y'])
-            ys[name] = y
-    
+        x_col = self.data.columns[0]
+        y_col = self.data.columns[1]
+        s_col = self.data.columns[2]
+
         series_list = list()
-        for name, y in ys.items():
+        x = list(self.data.astype(str)[x_col].unique())
+        stacks = list(self.data[s_col].unique())
+        for selection, s in self.data.groupby(s_col):
+            y = list(s[y_col])
             d = {
-                'name': name,
+                'name': selection,
                 'type': 'bar',
                 'barGap': '0',
                 'stack': 'total',
@@ -132,14 +137,17 @@ class BarplotStacked():
                 }
             },
             'legend': {
-                'data': groups
+                'data': stacks
             },
             'xAxis': {
                 'type': 'category',
                 'data': x
             },
             'yAxis': {
-                'type': 'value'
+                'type': 'value',
+                # 'name': f'{self.metadata[y_col]["label"]} in {self.metadata[y_col]["unit"]}',
+                'nameLocation': 'middle',
+                'nameGap': 50
             },
             'series': series_list
         }
@@ -154,22 +162,18 @@ class BarplotGroupedStacked():
         self.metadata = metadata
 
     def build_options(self):
-        x = list(self.data.astype(str)['x'].unique())
-        # ys = dict()
-        stacks = self.data['stacks']
-        groups = list(stacks.unique())
-        print('abcdefg')
-        # for name, group_name, s in self.data.groupby(['stacks', 'groups']):
-        series_list = list()
-        for name, s in self.data.groupby(['groups', 'stacks']):
-            group_name = name[0]
-            stack_name = name[1]
-            print(name)
-            print(s)
-            # print(group_name)
-            y = list(s['y'])
-            # ys[name] = y
+        x_col = self.data.columns[0]
+        y_col = self.data.columns[1]
+        g_col = self.data.columns[2]
+        s_col = self.data.columns[3]
 
+        x = list(self.data[x_col].astype(str).unique())
+        stacks = list(self.data[s_col].unique())
+        series_list = list()
+        for selection, s in self.data.groupby([g_col, s_col]):
+            group_name = selection[0]
+            stack_name = selection[1]
+            y = list(s[y_col])
             d = {
                 'name': stack_name,
                 'type': 'bar',
@@ -184,23 +188,6 @@ class BarplotGroupedStacked():
                 'data': y
             }
             series_list.append(d)
-    
-        # series_list = list()
-        # for name, y in ys.items():
-        #     d = {
-        #         'name': name,
-        #         'type': 'bar',
-        #         'barGap': '0',
-        #         'stack': 'Ad',
-        #         'label': {
-        #             'show': True
-        #         },
-        #         'emphasis': {
-        #             'focus': 'series'
-        #         },
-        #         'data': y
-        #     }
-        #     series_list.append(d)
         
         options = {
             'tooltip': {
@@ -210,14 +197,17 @@ class BarplotGroupedStacked():
                 }
             },
             'legend': {
-                'data': groups
+                'data': stacks
             },
             'xAxis': {
                 'type': 'category',
                 'data': x
             },
             'yAxis': {
-                'type': 'value'
+                'type': 'value',
+                # 'name': f'{self.metadata[y_col]["label"]} in {self.metadata[y_col]["unit"]}',
+                'nameLocation': 'middle',
+                'nameGap': 50
             },
             'series': series_list
         }
