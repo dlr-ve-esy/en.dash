@@ -9,12 +9,17 @@ from streamlit_extras.markdownlit import mdlit
 from collections import defaultdict
 from PIL import Image
 import dashboard.tabs
+import importlib.util
 
 from streamlit_option_menu import option_menu
 
-tab_hooks = {
-    i[4:]: getattr(dashboard.tabs, i) for i in dir(dashboard.tabs) if i[0:4] == "tab_"
-}
+tab_hooks = {}
+
+for i in pt.Path("./dashboard/tabs").glob("tab_*.py"):
+    spec = importlib.util.spec_from_file_location(f"dashboard.tabs.{i.stem}", i)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    tab_hooks[i.stem[4:]] = mod
 
 
 def get_meta(store: object, hdfpackage_path: str) -> dict:
