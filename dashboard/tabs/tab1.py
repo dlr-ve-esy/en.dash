@@ -16,7 +16,6 @@ def create(data, metadata):
         filters_value = dict()
         if 'filters' in config:
             for filter in config['filters']:
-                print(filter)
                 filters_value[filter] = st.selectbox(
                     label=filter,
                     options=list(data[filter].unique())
@@ -41,15 +40,15 @@ def create(data, metadata):
             con = data_plot[filter] == value
             data_plot = data_plot.loc[con]
         data_plot = data_plot[[config_plot['x'], config_plot['y']]]
-        data_plot.columns = ['x', 'y']
-        s = BarplotSimple(data_plot)
+        # data_plot.columns = ['x', 'y']
+        s = BarplotSimple(data_plot, metadata)
         options = s.build_options()
 
     elif plot_type == 'grouped':
         config_plot = {
+            'filters': ['Region'],
             'x': 'Year',
             'y': 'InstalledPower',
-            'filters': ['Region'],
             'groups': 'Technology'
         }
         data_plot = data.reset_index()
@@ -58,15 +57,15 @@ def create(data, metadata):
             con = data_plot[filter] == value
             data_plot = data_plot.loc[con]
         data_plot = data_plot[[config_plot['x'], config_plot['y'], config_plot['groups']]]
-        data_plot.columns = ['x', 'y', 'groups']
-        s = BarplotGrouped(data_plot)
+        # data_plot.columns = ['x', 'y', 'groups']
+        s = BarplotGrouped(data_plot, metadata)
         options = s.build_options()
 
     elif plot_type == 'stacked':
         config_plot = {
+            'filters': ['Region'],
             'x': 'Year',
             'y': 'InstalledPower',
-            'filters': ['Region'],
             'stacks': 'Technology'
         }
         data_plot = data.reset_index()
@@ -75,8 +74,8 @@ def create(data, metadata):
             con = data_plot[filter] == value
             data_plot = data_plot.loc[con]
         data_plot = data_plot[[config_plot['x'], config_plot['y'], config_plot['stacks']]]
-        data_plot.columns = ['x', 'y', 'stacks']
-        s = BarplotStacked(data_plot)
+        # data_plot.columns = ['x', 'y', 'stacks']
+        s = BarplotStacked(data_plot, metadata)
         options = s.build_options()
 
     elif plot_type == 'grouped & stacked':
@@ -92,8 +91,8 @@ def create(data, metadata):
             con = data_plot[filter] == value
             data_plot = data_plot.loc[con]
         data_plot = data_plot[[config_plot['x'], config_plot['y'], config_plot['groups'], config_plot['stacks']]]
-        data_plot.columns = ['x', 'y', 'groups', 'stacks']
-        s = BarplotGroupedStacked(data_plot)
+        # data_plot.columns = ['x', 'y', 'groups', 'stacks']
+        s = BarplotGroupedStacked(data_plot, metadata)
         options = s.build_options()
     else:
         options = {}
