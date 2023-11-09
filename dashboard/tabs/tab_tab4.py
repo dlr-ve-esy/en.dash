@@ -13,7 +13,6 @@ idx = pd.IndexSlice
 def create(data, metadata, cfg):
     data = data["Dispatch"]
     metadata = metadata["Dispatch"]
-    st.header("tab 4")
 
     config = {"selector" : "Region", "stacker": "Technology", "xaxis": "TimeStamp", "value": "AwardedPower"}
     select = st.selectbox(

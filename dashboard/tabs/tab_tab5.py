@@ -13,5 +13,18 @@ idx = pd.IndexSlice
 def create(data, metadata, cfg):
     data = data["SingleKey"]
     metadata = metadata["SingleKey"]
-    heat_options = heatmaps.heatmap(data, metadata)
+
+    select = st.selectbox(
+        label="Select storage level to display",
+        options=["Germany", "Austria"]
+    )
+
+    if select == "Germany":
+        select = "StoredEnergy_Germany"
+    else:
+        select = "StoredEnergy_Austria"
+
+    df = data.loc[:, select].round(2)
+
+    heat_options = heatmaps.heatmap(df, metadata)
     st_echarts(heat_options)
