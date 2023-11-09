@@ -1,4 +1,4 @@
-from .configuration import DashboardConfiguration, TabData
+from .configuration import DashboardConfiguration, TabData, load_plots_config
 from .general import load_tab_modules
 from .options import (
     delete_barred_user_overrides,
@@ -23,4 +23,5 @@ __all__ = [
     "add_data_download_button",
     "add_reference_widget",
     "setup_default_tabs",
+    "load_plots_config",
 ]

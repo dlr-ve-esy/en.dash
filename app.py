@@ -6,8 +6,9 @@ from dashboard.tools import (
     add_reference_widget,
     setup_default_tabs,
     load_tab_modules,
+    DashboardConfiguration,
+    load_plots_config,
 )
-from dashboard.tools.configuration import DashboardConfiguration, load_plots_config
 from dashboard.data.loaders import load_data
 
 if __name__ == "__main__":
