@@ -55,7 +55,7 @@ def update_options_with_defaults(options):
 
 def setup_default_tabs(dash_cfg, data, metadata, plots_cfg):
     for itab in dash_cfg.tabs:
-        if itab.id in ["references"]:
+        if itab.id in ["references", "contacts"]:
             continue
         if st.session_state["active_tab"] == itab.id:
             st.header(itab.label)
@@ -72,10 +72,25 @@ def setup_default_tabs(dash_cfg, data, metadata, plots_cfg):
             itab.tab_ref.create(data, metadata, plots_cfg)
 
 
+def add_contact_widget(dash_cfg):
+    itab = None
+    for i in dash_cfg.tabs:
+        if i.id == "contacts":
+            itab = i
+
+    if st.session_state["active_tab"] == itab.id:
+        st.header(itab.label)
+        mdlit("".join(pt.Path("./contact_info.md").open().readlines()))
+
+
 def add_reference_widget(dash_cfg):
     if dash_cfg.enable_references:
-        if st.session_state["active_tab"] == dash_cfg.tabs[-1].id:
-            st.header(dash_cfg.tabs[-1].label)
+        itab = None
+        for i in dash_cfg.tabs:
+            if i.id == "references":
+                itab = i
+        if st.session_state["active_tab"] == itab.id:
+            st.header(itab.label)
             txt = "These are the references:\n\n"
             refs = "".join(["- {}\n\n"] * len(dash_cfg.references))
             mdlit(txt + refs.format(*dash_cfg.references))

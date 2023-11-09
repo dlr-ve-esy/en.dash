@@ -51,10 +51,13 @@ class DashboardConfiguration:
 
     def prepare(self, tab_hooks):
         if self.enable_references:
-            if self.tabs[-1].id != "references":
+            if "references" not in [i.id for i in self.tabs]:
                 self.tabs.append(
                     TabData("references", "References", self.references_icon)
                 )
+
+        if "contacts" not in [i.id for i in self.tabs]:
+            self.tabs.append(TabData("contacts", "Information", "chat-square-dots"))
 
         for itab in self.tabs:
             if itab.id in tab_hooks:

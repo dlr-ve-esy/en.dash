@@ -1,7 +1,12 @@
 import streamlit as st
 import pathlib as pt
 from dashboard.layout.sidebar import create_default_sidebar
-from dashboard.tools import add_reference_widget, setup_default_tabs, load_tab_modules
+from dashboard.tools import (
+    add_contact_widget,
+    add_reference_widget,
+    setup_default_tabs,
+    load_tab_modules,
+)
 from dashboard.tools.configuration import DashboardConfiguration, load_plots_config
 from dashboard.data.loaders import load_data
 
@@ -36,3 +41,4 @@ if __name__ == "__main__":
     with root:
         setup_default_tabs(dash_cfg, data, metadata, plots_cfg)
         add_reference_widget(dash_cfg)
+        add_contact_widget(dash_cfg)
