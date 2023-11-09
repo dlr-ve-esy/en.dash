@@ -21,8 +21,6 @@ def heatmap(data, metadata):
     df["hour"] = df["hour"].astype(int)
     data = df.values.tolist()
 
-    # data = [[d, hours.index(h), random.randint(1, 10)] for d in days for h in hours]
-
     option = {
     "tooltip": {
         "position": 'top'

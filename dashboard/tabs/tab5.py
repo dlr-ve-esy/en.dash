@@ -10,6 +10,6 @@ import pandas as pd
 idx = pd.IndexSlice
 
 
-def create(data, metadata):
+def create(data, metadata, cfg):
     heat_options = heatmaps.heatmap(data, metadata)
     st_echarts(heat_options)

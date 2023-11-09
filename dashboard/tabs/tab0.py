@@ -1,29 +1,40 @@
 import streamlit as st
-from dashboard.tools import update_options_with_defaults
+from dashboard.tools import update_options_with_defaults, update_options_with_user_overrides
 from streamlit_echarts import st_echarts
 from dashboard.plots import lines
-import random
 
 
-def create(data, metadata):
-    st.header("tab 0")
-
-    radio_option = st.radio(
+def create(data, metadata, cfg):
+    select = st.selectbox(
         label="Select time series to display",
-        options=["Electricity Prices", "Storage Levels"]
+        options=data.columns
     )
 
-    if radio_option == "Electricity Prices":
-        col = "ElectricityPrice"
-    else:
-        col = "StoredEnergy"
-
-    df = data.loc[:, [f"{col}_Germany", f"{col}_Austria"]].round(2)
+    df = data.loc[:, select].round(2)
 
     line_options = lines.line(
         data=df,
         metadata=metadata,
-        # title=radio_option
     )
     line_options = update_options_with_defaults(line_options)
     st_echarts(line_options)
+
+    df = data.round(2)
+    line_options = lines.multiline(
+        data=df,
+        metadata=metadata
+    )
+    line_options = update_options_with_defaults(line_options)
+    st_echarts(line_options)
+
+    df = data.loc[:, ["AwardedEnergy_Germany", "AwardedEnergy_Austria"]]
+    line_y_axis_map = {
+        "AwardedEnergy_Germany": 0,
+        "AwardedEnergy_Austria": 1
+    }
+    line_options = lines.twolinetwoyaxes(
+        data=df,
+        metadata=metadata,
+        axesmapping=line_y_axis_map
+    )
+    st_echarts(line_options, height=500)
