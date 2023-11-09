@@ -118,7 +118,7 @@ def twolinetwoyaxes(data, metadata, axesmapping):
         "yAxis": [
             {
                 "gridIndex": axisindex,
-                "name": metadata[col]["label"],
+                "name": f'{metadata[col]["label"]} in {metadata[col]["unit"]}',
                 "nameLocation": "middle",
                 "nameGap": 75,
                 "type": 'value',
@@ -138,14 +138,60 @@ def twolinetwoyaxes(data, metadata, axesmapping):
     return update_options_with_user_overrides(_default_line_options(), options)
 
 
+def twolinestwoyaxesonesubplot(data, metadata, axesmapping):
+    option = {
+        "tooltip": {
+            "trigger": 'axis',
+            "axisPointer": {
+            "type": 'cross',
+            "crossStyle": {
+                "color": '#999'
+            }
+            }
+        },
+        "toolbox": {
+            "feature": {
+            "dataView": { "show": True, "readOnly": False },
+            "magicType": { "show": True, "type": ['line', 'bar'] },
+            "restore": { "show": True },
+            "saveAsImage": { "show": True }
+            }
+        },
+        "legend": {"data": [metadata[col]["label"] for col in axesmapping]},
+        "xAxis": [
+            {
+            "type": 'category',
+            "data": data.index.tolist(),
+            }
+        ],
+        "yAxis": [
+            {
+            "type": 'value',
+            "name": f'{metadata[col]["label"]} in {metadata[col]["unit"]}',
+            "nameLocation": "middle",
+            "nameGap": 75,
+            "alignTicks": True
+            } for col in axesmapping
+        ],
+        "series": [
+            {
+            "name": metadata[col]["label"],
+            "type": 'line',
+            "yAxisIndex": axisindex,
+            "data": data[col].tolist()
+            } for col, axisindex in axesmapping.items()
+        ]
+    }
+    return update_options_with_user_overrides(_default_line_options(), option)
+
 
 def stacked_area(data, metadata):
     datazoom = {
     "dataZoom": [
         {
             "type": 'slider',
-            "start": 25,
-            "end": 75,
+            "start": 5,
+            "end": 7,
             "xAxisIndex": 0,
             "zoomLock": True
         }

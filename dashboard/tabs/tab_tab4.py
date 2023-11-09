@@ -11,17 +11,19 @@ idx = pd.IndexSlice
 
 
 def create(data, metadata, cfg):
+    data = data["Dispatch"]
+    metadata = metadata["Dispatch"]
     st.header("tab 4")
 
     config = {"selector" : "Region", "stacker": "Technology", "xaxis": "TimeStamp", "value": "AwardedPower"}
-    radio_option = st.radio(
-        label="Select country",
+    select = st.selectbox(
+        label=f"Select {config['selector']}",
         options=data.index.get_level_values(config["selector"]).unique().tolist(),
-        key="tab4radio"
+        key="tab4select"
     )
 
     df = pd.pivot_table(
-        data.xs(radio_option, level=config["selector"]),
+        data.xs(select, level=config["selector"]),
         columns=config["stacker"],
         index=config["xaxis"],
         values=config["value"]

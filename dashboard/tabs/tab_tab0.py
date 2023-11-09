@@ -40,3 +40,10 @@ def create(data, metadata, cfg):
         axesmapping=line_y_axis_map
     )
     st_echarts(line_options, height=500)
+
+    line_options = lines.twolinestwoyaxesonesubplot(
+        data=df,
+        metadata=metadata,
+        axesmapping=line_y_axis_map
+    )
+    st_echarts(line_options, height=500)
