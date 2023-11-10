@@ -7,12 +7,12 @@ from dashboard.tools.widgets import insert_sidebar_qrcode
 
 def create_default_sidebar(dash_cfg: DashboardConfiguration):
     if st.session_state["style"] == "dark":
-        logo = Image.open("data/column-chart-line-icon-white.png")
+        logo = Image.open("data/logo-dark.png")
         logo = logo.resize((150, 100))
 
         st.image(logo, output_format="png")
     elif st.session_state["style"] == "light":
-        logo = Image.open("data/column-chart-line-icon-black.png")
+        logo = Image.open("data/logo-light.png")
         logo = logo.resize((150, 100))
 
         st.image(logo, output_format="png")
