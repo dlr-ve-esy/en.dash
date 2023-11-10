@@ -32,6 +32,7 @@ def add_contact_widget(dash_cfg):
     for i in dash_cfg.tabs:
         if i.id == "contacts":
             itab = i
+            break
 
     if st.session_state["active_tab"] == itab.id:
         st.header(itab.label)
@@ -44,6 +45,7 @@ def add_reference_widget(dash_cfg):
         for i in dash_cfg.tabs:
             if i.id == "references":
                 itab = i
+                break
         if st.session_state["active_tab"] == itab.id:
             st.header(itab.label)
             txt = "These are the references:\n\n"

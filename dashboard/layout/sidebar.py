@@ -22,7 +22,7 @@ def create_default_sidebar(dash_cfg: DashboardConfiguration):
         [i.label for i in dash_cfg.tabs],
         icons=[i.icon for i in dash_cfg.tabs],  # bootstrap icons
         menu_icon=dash_cfg.sidemenu_icon,
-        default_index=1,
+        default_index=0,
     )
 
     for i in dash_cfg.tabs:
