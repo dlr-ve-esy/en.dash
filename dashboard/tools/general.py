@@ -12,7 +12,7 @@ def create_qrcode(url: str):
 def load_tab_modules():
     tab_hooks = {}
 
-    for i in pt.Path("./dashboard/tabs").glob("tab_*.py"):
+    for i in pt.Path("./tabs").glob("tab_*.py"):
         spec = importlib.util.spec_from_file_location(f"dashboard.tabs.{i.stem}", i)
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
