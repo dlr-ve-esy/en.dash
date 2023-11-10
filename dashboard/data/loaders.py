@@ -17,23 +17,20 @@ def load_data(path: pt.Path) -> dict:
 
     if path.exists():
         load = pd.HDFStore(path=path, mode="r")
-        hdfpackage_path = "TimeSeries/SingleKey"
-        datasets["SingleKey"] = load.get(hdfpackage_path)
-        metadata["SingleKey"] = get_meta(load, hdfpackage_path)
-        datasets["dataset1"] = np.random.randint(1, 999, (2, 100))
-        metadata["dataset1"] = {}
-        hdfpackage_path = "TimeSeries/MultiKey/Dispatch"
-        datasets["Dispatch"] = load.get(hdfpackage_path)
-        metadata["Dispatch"] = get_meta(load, hdfpackage_path)
 
-        hdfpackage_path = "Bar/Capacity"
-        df = load.get(hdfpackage_path).reset_index()
+        hdfpackage_paths = ["Line/SingleKey", "Line/TwoKey", "Dispatch", "Capacity"]
+
+        for hdfpackage_path in hdfpackage_paths:
+            datasets[hdfpackage_path] = load.get(hdfpackage_path)
+            metadata[hdfpackage_path] = get_meta(load, hdfpackage_path)
+
+        df = datasets["Capacity"]
         df2 = df.copy()
         df2["Year"] = 2020
         df2["InstalledPower"] = df["InstalledPower"] + 100
         df_new = pd.concat([df, df2])
-        datasets["inst_power"] = df_new
-        metadata["inst_power"] = get_meta(load, hdfpackage_path)
+        datasets["Capacity"] = df_new
+
     else:
         datasets["SingleKey"] = pd.DataFrame()
         metadata["SingleKey"] = {}
