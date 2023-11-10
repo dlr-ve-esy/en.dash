@@ -4,6 +4,8 @@ import pathlib as pt
 import pandas as pd
 
 from dashboard.tools.general import create_qrcode
+from base64 import b64encode
+from io import BytesIO
 
 
 def setup_default_tabs(dash_cfg, data, metadata, plots_cfg):
@@ -62,8 +64,11 @@ def add_data_download_button(
 
 def insert_sidebar_qrcode(url: str, url_text: str):
     qr = create_qrcode(url)
-    st.image(qr, output_format="png")
+
+    img_io = BytesIO()
+    qr.resize((200, 200)).save(img_io, "PNG")
+
     st.markdown(
-        f'<p style="text-align: center; color: grey;"><a href="{url}">{url_text}</p>',
+        f'<p style="text-align: center; color: grey;"><a href="{url}"><img src="data:image/png;base64,{b64encode(img_io.getvalue()).decode("ascii")}" alt="{url_text}"/></p>',
         unsafe_allow_html=True,
     )
