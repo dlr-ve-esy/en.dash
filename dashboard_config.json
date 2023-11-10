@@ -12,35 +12,8 @@
             "id": "tab0",
             "label": "Tab One",
             "icon": "bar-chart-line",
-            "text": "my long big fat **text**",
+            "text": "Add your functions to the `'./tabs/tab_tab0.py'` file! :)",
             "display_enabled": false
-        },
-        {
-            "id": "tab1",
-            "label": "Tab Two",
-            "icon": "bar-chart-line",
-            "path": "./test.md"
-        },
-        {
-            "id": "tab2",
-            "label": "Tab Three",
-            "icon": "bar-chart-line"
-        },
-        {
-            "id": "tab3",
-            "label": "Tab Four",
-            "icon": "bar-chart-line"
-        },
-        {
-            "id": "tab4",
-            "label": "Tab Five",
-            "icon": "bar-chart-line"
-        },
-        {
-            "id": "tab5",
-            "label": "Storage levels",
-            "icon": "bar-chart-line",
-            "text": "The storage level indicates the stored energy per hour and day in the selected node in MWh."
         }
     ],
     "references": [
