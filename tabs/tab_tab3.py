@@ -28,20 +28,28 @@ def create(data, metadata, plots_cfg):
             options=data['Region'].unique()
         )
 
+        d_label_key = dict()
+
         xaxis_options = ['ElectricityPrice', 'AwardedEnergy', 'Shortage', 'StoredEnergy']
-        selected_x = st.selectbox(
+        for xaxis_option in xaxis_options:
+            xaxis_option_label = metadata[xaxis_option]['label']
+            d_label_key[xaxis_option_label] = xaxis_option
+
+        xaxis_options = d_label_key.keys()
+        selected_x_label = st.selectbox(
             label='X-Axis',
             options=xaxis_options
         )
+        selected_x = d_label_key[selected_x_label]
 
-        yaxis_options = [item for item in xaxis_options if item != selected_x]
-        selected_y = st.selectbox(
+        yaxis_options = [item for item in xaxis_options if item != selected_x_label]
+        selected_y_label = st.selectbox(
             label='Y-Axis',
             options=yaxis_options
         )
+        selected_y = d_label_key[selected_y_label]
 
         data = data.loc[data['Region'] == selected_region][[selected_x, selected_y]].values
-        # data = data.set_index(selected_x, drop=True)
 
     with plotarea:
         options = scatterplot(data, metadata)
