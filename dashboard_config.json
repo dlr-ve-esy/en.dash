@@ -5,6 +5,8 @@
     "references_icon": "list",
     "sidemenu_icon": "layout-text-window-reverse",
     "data_path": "./data/amiris.hdf5",
+    "qrcode_url": "my fancy url",
+    "qrcode_url_text": "click me",
     "tabs": [
         {
             "id": "tab0",

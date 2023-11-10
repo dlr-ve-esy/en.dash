@@ -3,6 +3,8 @@ from markdownlit import mdlit
 import pathlib as pt
 import pandas as pd
 
+from dashboard.tools.general import create_qrcode
+
 
 def setup_default_tabs(dash_cfg, data, metadata, plots_cfg):
     for itab in dash_cfg.tabs:
@@ -55,4 +57,13 @@ def add_data_download_button(
         data.to_csv().encode("utf-8"),
         f"{file_name}.csv",
         "text/csv",
+    )
+
+
+def insert_sidebar_qrcode(url: str, url_text: str):
+    qr = create_qrcode(url)
+    st.image(qr, output_format="png")
+    st.markdown(
+        f'<p style="text-align: center; color: grey;"><a href="{url}">{url_text}</p>',
+        unsafe_allow_html=True,
     )
