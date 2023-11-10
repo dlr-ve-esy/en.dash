@@ -3,6 +3,9 @@ from dashboard.tools import update_options_with_user_overrides
 
 def _default_scatterplot_options():
     options = {
+        'tooltip': {
+            'position': 'top'
+        },
         'yAxis': {
             'nameLocation': 'middle',
             'nameGap': 50,
