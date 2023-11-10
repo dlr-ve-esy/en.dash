@@ -36,6 +36,7 @@ class DashboardConfiguration:
     data_path: pt.Path | None = field(default=None)
     qrcode_url: str | None = field(default=None)
     qrcode_url_text: str = field(default="click here")
+    logo_size: tuple[int, int] = field(default=(150, 100))
 
     @classmethod
     def load(cls, path: pt.Path):

@@ -13,7 +13,7 @@ def setup_default_tabs(dash_cfg, data, metadata, plots_cfg):
         if itab.id in ["references", "contacts"]:
             continue
         if st.session_state["active_tab"] == itab.id:
-            st.header(itab.label)
+            mdlit(f"# {itab.label}")
             if itab.display_infobox:
                 with st.expander(
                     f"{itab.display_icon} {itab.display_label}",
