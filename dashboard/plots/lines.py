@@ -18,12 +18,20 @@ def _default_line_options():
         "dataZoom": [
             {
                 "type": 'slider',
-                "start": 0,
-                "end": 1,
                 "xAxisIndex": 0,
-                "zoomLock": True
+            },
+            {
+                "type": 'inside',
+                "xAxisIndex": 0,
+                "zoomOnMouseWheel": True
             }
         ],
+        "xAxis": {
+            "nameLocation": "middle",
+        },
+        "yAxis": {
+            "nameLocation": "middle",
+        }
     }
 
 
