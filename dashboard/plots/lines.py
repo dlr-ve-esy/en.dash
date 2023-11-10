@@ -31,7 +31,14 @@ def _default_line_options():
         },
         "yAxis": {
             "nameLocation": "middle",
-        }
+        },
+        "toolbox": {
+            "feature": {
+                "dataZoom": {
+                    "show": True
+                }
+            }
+        },
     }
 
 
