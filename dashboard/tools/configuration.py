@@ -33,7 +33,7 @@ class DashboardConfiguration:
     dashboard_label: str = field(default="title of dashboard")
     references_icon: str = field(default="list")
     sidemenu_icon: str = field(default="layout-text-window-reverse")
-    data_path: pt.Path = field(default="./data/data.h5f")
+    data_path: pt.Path | None = field(default=None)
     qrcode_url: str | None = field(default=None)
     qrcode_url_text: str = field(default="click here")
 

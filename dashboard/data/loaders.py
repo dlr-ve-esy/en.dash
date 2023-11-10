@@ -12,7 +12,7 @@ def load_data(path: pt.Path) -> dict:
     datasets = {}
     metadata = {}
 
-    if path.exists():
+    if path is not None and path.exists():
         with pd.HDFStore(path=path, mode="r") as store:
             for key in store:
                 datasets[key] = store.get(key)
