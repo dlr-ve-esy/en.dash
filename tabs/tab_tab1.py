@@ -9,8 +9,8 @@ import pandas as pd
 
 
 def create(data, metadata, cfg):
-    data = data['inst_power']
-    metadata = metadata['inst_power']
+    data = data['Capacity']
+    metadata = metadata['Capacity']
     cfg = cfg['installed_power_plot']
 
     def add_filters(config, data):
