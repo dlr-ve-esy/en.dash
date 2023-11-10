@@ -7,6 +7,10 @@
     "data_path": null,
     "qrcode_url": "my fancy url",
     "qrcode_url_text": "click me",
+    "logo_size": [
+        150,
+        100
+    ],
     "tabs": [
         {
             "id": "tab0",
