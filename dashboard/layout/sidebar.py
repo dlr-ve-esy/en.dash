@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image
 from streamlit_option_menu import option_menu
 from dashboard.tools.configuration import DashboardConfiguration
+from dashboard.tools.widgets import insert_sidebar_qrcode
 
 
 def create_default_sidebar(dash_cfg: DashboardConfiguration):
@@ -38,3 +39,6 @@ def create_default_sidebar(dash_cfg: DashboardConfiguration):
             st.session_state["style"] = "dark"
         else:
             st.session_state["style"] = "light"
+
+    if dash_cfg.qrcode_url is not None:
+        insert_sidebar_qrcode(dash_cfg.qrcode_url, dash_cfg.qrcode_url_text)

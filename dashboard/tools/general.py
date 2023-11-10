@@ -1,6 +1,13 @@
 import pathlib as pt
 import importlib
 
+import qrcode
+
+
+def create_qrcode(url: str):
+    img = qrcode.make(url)
+    return img.get_image()
+
 
 def load_tab_modules():
     tab_hooks = {}

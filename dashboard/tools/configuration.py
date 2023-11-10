@@ -34,6 +34,8 @@ class DashboardConfiguration:
     references_icon: str = field(default="list")
     sidemenu_icon: str = field(default="layout-text-window-reverse")
     data_path: pt.Path = field(default="./data/data.h5f")
+    qrcode_url: str | None = field(default=None)
+    qrcode_url_text: str = field(default="click here")
 
     @classmethod
     def load(cls, path: pt.Path):
