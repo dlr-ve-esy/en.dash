@@ -9,34 +9,16 @@ def get_meta(store: object, hdfpackage_path: str) -> dict:
 
 
 def load_data(path: pt.Path) -> dict:
-    # with zipfile.ZipFile(path.as_posix()) as zf:
-    #     data = pd.read_csv(io.BytesIO(zf.read("Mark_Ie_Daten.csv")))
-
     datasets = {}
     metadata = {}
 
     if path.exists():
-        load = pd.HDFStore(path=path, mode="r")
-
-        hdfpackage_paths = ["Line/SingleKey", "Line/TwoKey", "Dispatch", "Capacity"]
-
-        for hdfpackage_path in hdfpackage_paths:
-            datasets[hdfpackage_path] = load.get(hdfpackage_path)
-            metadata[hdfpackage_path] = get_meta(load, hdfpackage_path)
-
-        df = datasets["Capacity"]
-        df2 = df.copy()
-        df2["Year"] = 2020
-        df2["InstalledPower"] = df["InstalledPower"] + 100
-        df_new = pd.concat([df, df2])
-        datasets["Capacity"] = df_new
-
+        with pd.HDFStore(path=path, mode="r") as store:
+            for key in store:
+                datasets[key] = store.get(key)
+                metadata[key] = get_meta(store, key)
     else:
-        datasets["SingleKey"] = pd.DataFrame()
-        metadata["SingleKey"] = {}
-        datasets["dataset1"] = np.random.randint(1, 999, (2, 100))
-        metadata["dataset1"] = {}
-        datasets["Dispatch"] = pd.DataFrame()
-        metadata["Dispatch"] = {}
+        datasets = {}
+        metadata = {}
 
     return datasets, metadata
