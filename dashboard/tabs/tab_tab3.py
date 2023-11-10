@@ -11,8 +11,11 @@ import pandas as pd
 
 
 def create(data, metadata, plots_cfg):
-    data = data["dataset1"]
-    metadata = metadata["dataset1"]
+    # strompreis vs. last (awardedpower)
+    data = data["SingleKey"]
+    metadata = metadata["SingleKey"]
+
+    data = data[["StoredEnergy_Austria", "StoredEnergy_Germany"]].values
 
     st.subheader("test plots")
     navbar, plotarea = st.columns([0.2, 0.8])
@@ -23,34 +26,12 @@ def create(data, metadata, plots_cfg):
     with plotarea:
         chart_container(pd.DataFrame(data), tabs=["Export"])
         options = {
-            "title": {
-                "text": "scattering the scatters",
-                "left": "center",
-                "textStyle": {
-                    "color": "#999",
-                    "fontWeight": "normal",
-                    "fontSize": 14,
-                },
-            },
-            "tooltip": {"position": "top"},
-            "visualMap": {
-                "min": 0,
-                "max": 1000,
-                "text": ["high", "low"],
-                "realtime": True,
-                "calculable": True,
-                "left": "2px",
-                "top": "20px",
-            },
-            "grid": {"left": "200px"},
             "xAxis": {},
             "yAxis": {},
             "series": {
-                # "symbolSize": JsCode("function (val) { return val[1] * 0.01;}").js_code,
                 "symbolSize": 10,
-                "data": data.T.tolist(),
+                "data": data.tolist(),
                 "type": "scatter",
-                "encode": {"tooltip": [0, 1]},
             },
         }
         user = delete_barred_user_overrides(
