@@ -1,3 +1,10 @@
-bokeh==2.4.3
 streamlit
 pandas
+streamlit_echarts
+streamlit_option_menu
+tables
+cattrs
+attrs
+sphinx
+qrcode
+streamlit_extras
