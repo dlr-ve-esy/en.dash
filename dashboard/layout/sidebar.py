@@ -6,16 +6,18 @@ from dashboard.tools.widgets import insert_sidebar_qrcode
 
 
 def create_default_sidebar(dash_cfg: DashboardConfiguration):
+    _, center, _ = st.columns([0.1, 0.8, 0.1])
     if st.session_state["style"] == "dark":
         logo = Image.open("data/logo-dark.png")
-        logo = logo.resize(*dash_cfg.logo_size)
 
-        st.image(logo, output_format="png")
+        with center:
+            st.image(logo, output_format="png")
+
     elif st.session_state["style"] == "light":
         logo = Image.open("data/logo-light.png")
-        logo = logo.resize(*dash_cfg.logo_size)
 
-        st.image(logo, output_format="png")
+        with center:
+            st.image(logo, output_format="png")
 
     selected = option_menu(
         dash_cfg.dashboard_label,
