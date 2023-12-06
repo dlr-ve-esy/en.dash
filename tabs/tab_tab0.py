@@ -31,17 +31,21 @@ def create(data, metadata, cfg):
                 range_color=["lightskyblue", "yellow", "orangered"],
             )
         )
-        .render_embed()
     )
-    components.html(c, height=1000)
-
-    c = charts.chart.Chart3D(
-        # init_opts=opts.InitOpts(bg_color="#000", renderer=opts.RenderOpts(is_embed_js=True))
-    )
-    c.add_globe(
-        base_texture="/app/static/data/world.topo.bathy.200401.jpg",
-        displacement_scale=0.2,
-        shading="realistic",
-        environment="/app/static/data/starfield.jpg",
-    )
+    print(c.options["series"])
+    # c.__dict__["options"]["series"] +=
+    c.options["series"] += [{"type": "lines3D", "data": [[[0, 0], [10, 10]]], "coordinateSystem": "geo3D"}]
+    print(c.render_embed())
     components.html(c.render_embed(), height=1000)
+
+    # c = charts.chart.Chart3D(
+    #     # init_opts=opts.InitOpts(bg_color="#000", renderer=opts.RenderOpts(is_embed_js=True))
+    # )
+    # c.add_globe(
+    #     base_texture="/app/static/data/world.topo.bathy.200401.jpg",
+    #     displacement_scale=0.2,
+    #     shading="realistic",
+    #     environment="/app/static/data/starfield.jpg",
+
+    # )
+    # components.html(c.render_embed(), height=1000)
